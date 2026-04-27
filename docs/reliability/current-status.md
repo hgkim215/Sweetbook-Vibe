@@ -2,11 +2,11 @@
 
 ## 요약
 
-- 현재 단계: OpenAI 키 포함 품질 반복 개선 완료
+- 현재 단계: 제출 가능 상태, 다음 품질 반복 개선 대기
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
-- 최종 목표: Lv3까지 구현 후 전체 검증, `main` 자동 반영
+- 최종 목표: Lv3까지 구현 후 전체 검증, `main` 자동 반영, 이후 반복 개선
 - 상태 업데이트 규칙: 단계 시작, 기능 단위 완료, 검증 실행, 커밋/푸시 후 갱신
 
 ## 완료
@@ -17,13 +17,13 @@
 
 ## 진행 중
 
-- `dev` 푸시 완료 후 `main` 반영 준비
+- OpenAI 키 포함 품질 반복 개선 완료
 
 ## 다음 작업
 
-1. `main` 반영
-2. 다음 품질 반복 개선 항목 탐색
-3. 필요 시 면접 발표 자료 준비
+1. 다음 품질 반복 개선 항목 탐색
+2. 필요 시 면접 발표 자료 준비
+3. 구글폼 제출 전 README 기준 실행 재확인
 
 ## 최근 검증
 
@@ -41,9 +41,9 @@
 - Docker build context 비밀값 차단: `.dockerignore` 추가
 - `scripts/verify-full.sh`: 통과
 
-## 최근 커밋
+## 최근 반영
 
-- `de499a6 chore: harden openai assistant secret handling`
+- OpenAI 보조 정리자 `.env` 로딩, 실패 fallback 테스트, Docker build context 비밀값 차단, 관련 문서 갱신을 `origin/dev`에 반영했다.
 
 ## 주의사항
 
