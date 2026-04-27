@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: GrowthBook UI/UX 개선 및 반복 검증
+- 현재 단계: GrowthBook UI/UX 개선 완료, 다음 품질 반복 항목 탐색
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,15 +17,17 @@
 
 ## 진행 중
 
-- Lv1-Lv3 구현 완료 상태에서 UI/UX 품질 반복 개선 중
+- Lv1-Lv3 구현 완료 상태에서 UI/UX 품질 반복 개선 1차 완료
 - 기존 큰 폼 중심 화면을 `성장기록 목록 / 기록 편집 / 성장기록집 주문` 3열 작업 화면으로 개편 완료
 - 모바일에서는 목록, 편집, 주문 영역이 순서대로 쌓이도록 반응형 레이아웃 확인 완료
 - 브라우저 DOM 조작으로 성장기록 선택, Gemini 챕터 제안, 주문 생성, 상태 변경, JSON 다운로드 링크 확인 완료
+- UI/UX 개선 커밋 `e26581e`를 `origin/dev`와 `origin/main`에 반영 완료
 
 ## 다음 작업
 
-1. UI/UX 개선 변경분을 `dev`와 `main`에 반영
-2. 다음 품질 반복 개선 항목 탐색
+1. 다음 품질 반복 개선 항목 탐색
+2. README 실행 흐름과 실제 UI 용어가 완전히 맞는지 재점검
+3. 필요하면 UI 회귀 테스트 자동화 검토
 
 ## 최근 검증
 
@@ -65,10 +67,12 @@
 - UI/UX 개선 후 `npm run build`: 통과
 - UI/UX 개선 후 `scripts/verify-fast.sh`: 통과
 - UI/UX 개선 후 `PORT=3002 scripts/verify-full.sh`: 통과
+- UI/UX 개선 `origin/dev` 푸시: 완료
+- UI/UX 개선 `origin/main` 반영: 완료
 
 ## 최근 반영
 
-- GrowthBook을 제출 검증자가 바로 이해할 수 있는 작업 도구 화면으로 정리했다. 상단 compact app header, 좌측 성장기록 목록, 중앙 편집 폼, 우측 성장기록집 주문 패널, 하단 주문 상세 흐름으로 재구성했고, Gemini/Mock 상태 배지를 화면에서 확인할 수 있게 했다. 변경 후 fast/full 검증이 모두 통과했다.
+- GrowthBook을 제출 검증자가 바로 이해할 수 있는 작업 도구 화면으로 정리했다. 상단 compact app header, 좌측 성장기록 목록, 중앙 편집 폼, 우측 성장기록집 주문 패널, 하단 주문 상세 흐름으로 재구성했고, Gemini/Mock 상태 배지를 화면에서 확인할 수 있게 했다. 변경 후 fast/full 검증이 모두 통과했고 `origin/dev`, `origin/main`에 반영했다.
 
 ## 주의사항
 
