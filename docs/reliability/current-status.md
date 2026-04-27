@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: Gemini API 전환 및 Docker 재검증 완료, `main` 반영 준비
+- 현재 단계: Gemini 실제 경로 검증 완료
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -21,6 +21,7 @@
 - 로컬 `.env`를 Gemini 키 기준으로 전환 완료
 - 키 미설정 Mock fallback 확인 완료
 - Gemini 전환 후 Docker 전체 검증 완료
+- Gemini 실제 API 경로 검증 완료
 - Lv1-Lv3 API smoke test 추가 완료
 - 테스트용 Docker 볼륨 정리 개선 완료
 - Gemini 전환 `origin/dev` 반영 완료
@@ -28,8 +29,8 @@
 
 ## 다음 작업
 
-1. `dev`와 `main`에 최종 반영
-2. Gemini 키를 넣은 뒤 실제 `source: "gemini"` 경로 검증
+1. 검증 결과 문서 반영
+2. `dev`와 `main`에 최종 반영
 3. 다음 품질 반복 개선 항목 탐색
 
 ## 최근 검증
@@ -61,10 +62,11 @@
 - Gemini 전환 `origin/dev` 푸시: 완료
 - Gemini 전환 후 `scripts/verify-full.sh`: Docker 데몬 미준비로 Docker 단계에서 중단
 - Docker Desktop 재기동 후 `scripts/verify-full.sh`: 통과
+- Gemini 실제 호출: `source: "gemini"`, 챕터 2개, 잘못된 recordIds 0개
 
 ## 최근 반영
 
-- OpenAI API 과금 한계 때문에 AI 공급자를 Gemini API로 교체했다. Gemini 키는 `.env`의 `GEMINI_API_KEY`에 넣는다. 현재 키는 비어 있으며, 키가 없으면 Mock fallback이 정상 동작한다. Docker 재검증까지 통과했다.
+- OpenAI API 과금 한계 때문에 AI 공급자를 Gemini API로 교체했다. Gemini 키는 `.env`의 `GEMINI_API_KEY`에 넣는다. `GEMINI_MODEL=gemini-2.5-flash`로 실제 호출이 통과했고, 응답 source는 `gemini`로 확인됐다.
 
 ## 주의사항
 
