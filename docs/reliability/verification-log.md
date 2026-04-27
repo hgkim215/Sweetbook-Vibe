@@ -63,3 +63,4 @@
 | 2026-04-28 | 브라우저 DOM AI 예시 기록 플로우 | 통과 | 버튼 클릭으로 기록 수가 3개에서 4개로 증가했고, 생성 기록 수정, 선택, 챕터 제안, 주문 생성, JSON 다운로드 링크까지 확인했다. |
 | 2026-04-28 | Gemini 실제 sample-record API | 통과 | 로컬 Gemini 키로 `POST /api/assist/sample-record` 호출 시 HTTP 201, `source: "gemini"`, record id 생성이 확인됐다. |
 | 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | AI 예시 성장기록 생성 기능 추가 후 Docker Compose 빌드, health check, sample-record 포함 Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
+| 2026-04-28 | `origin/dev`, `origin/main` 반영 | 완료 | `feat: generate ai sample records` 커밋을 두 브랜치에 반영했다. |

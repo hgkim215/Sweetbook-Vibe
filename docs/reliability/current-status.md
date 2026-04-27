@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: AI 예시 성장기록 생성 기능 구현 완료
+- 현재 단계: AI 예시 성장기록 생성 기능 반영 완료
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -28,11 +28,12 @@
 - `AI 예시 기록 생성` 버튼으로 성장기록을 1개씩 추가하는 기능 구현 완료
 - Gemini 키가 있으면 Gemini 생성, 키가 없거나 실패하면 Mock 샘플 랜덤 생성 fallback 구현 완료
 - 생성된 예시 기록은 일반 성장기록처럼 수정, 삭제, 선택, 주문 플로우에 사용 가능
+- AI 예시 성장기록 생성 커밋 `66adbdd`를 `origin/dev`와 `origin/main`에 반영 완료
 
 ## 다음 작업
 
-1. AI 예시 성장기록 생성 기능을 `dev`와 `main`에 반영
-2. 다음 품질 반복 개선 항목 탐색
+1. 다음 품질 반복 개선 항목 탐색
+2. README 실행 흐름과 실제 UI 용어 재점검
 
 ## 최근 검증
 
@@ -85,10 +86,12 @@
 - 브라우저 DOM 플로우: 버튼 클릭으로 기록 수 3개에서 4개 증가, 생성 기록 수정, 선택, 챕터 제안, 주문 생성, JSON 링크 확인
 - Gemini 실제 sample-record API: HTTP 201, `source: "gemini"`, record id 생성 확인
 - AI 예시 성장기록 생성 후 `PORT=3002 scripts/verify-full.sh`: 통과
+- AI 예시 성장기록 생성 `origin/dev` 푸시: 완료
+- AI 예시 성장기록 생성 `origin/main` 반영: 완료
 
 ## 최근 반영
 
-- `AI 예시 기록 생성` 버튼과 `POST /api/assist/sample-record`를 추가했다. 버튼 한 번에 성장기록 1개가 생성되며, Gemini API 키가 있으면 Gemini 구조화 출력으로 생성하고 없거나 실패하면 Mock 샘플 중 1개를 랜덤으로 생성한다. fast/full 검증과 브라우저 플로우 검증이 통과했다.
+- `AI 예시 기록 생성` 버튼과 `POST /api/assist/sample-record`를 추가했다. 버튼 한 번에 성장기록 1개가 생성되며, Gemini API 키가 있으면 Gemini 구조화 출력으로 생성하고 없거나 실패하면 Mock 샘플 중 1개를 랜덤으로 생성한다. fast/full 검증과 브라우저 플로우 검증 통과 후 `origin/dev`, `origin/main`에 반영했다.
 
 ## 주의사항
 
