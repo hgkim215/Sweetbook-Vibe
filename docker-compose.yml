@@ -6,11 +6,11 @@ services:
     environment:
       PORT: 3000
       DATA_DIR: /app/data
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.4}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
     volumes:
       - growthbook-data:/app/data
 
 volumes:
   growthbook-data:
-

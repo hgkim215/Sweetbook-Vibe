@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const targetExts = new Set(['.ts', '.tsx', '.js', '.jsx', '.md', '.css', '.json']);
 const ignoredDirs = new Set(['.git', 'node_modules', 'dist', 'dist-server', 'coverage', 'data', '.obsidian']);
-const forbidden = [/api[_-]?key\s*[:=]\s*['"][A-Za-z0-9_-]{20,}/i, /sk-[A-Za-z0-9_-]{20,}/];
+const forbidden = [/api[_-]?key\s*[:=]\s*['"][A-Za-z0-9_-]{20,}/i, /sk-[A-Za-z0-9_-]{20,}/, /AIza[0-9A-Za-z_-]{20,}/];
 let failed = false;
 
 async function walk(dir) {
@@ -39,4 +39,3 @@ if (failed) {
 }
 
 console.log('[lint] 통과');
-

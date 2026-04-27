@@ -9,8 +9,8 @@ GrowthBook은 흩어진 학습, 프로젝트, 회고, 실패, 개선 기록을 `
 - 성장기록 목록, 상세, 생성, 수정, 삭제
 - 로그인 없이 바로 확인 가능한 더미 성장기록
 - 선택한 성장기록 기반 챕터 구성 제안
-- OpenAI API 키가 있으면 AI 보조 정리자 사용
-- OpenAI API 키가 없으면 규칙 기반 Mock 보조 정리자로 자동 fallback
+- Gemini API 키가 있으면 AI 보조 정리자 사용
+- Gemini API 키가 없으면 규칙 기반 Mock 보조 정리자로 자동 fallback
 - 성장기록집 주문 생성, 목록/상세 조회, 상태 변경
 - 주문 1건에 필요한 주문 정보, 챕터, 포함 기록, 메타데이터 JSON 다운로드
 
@@ -37,18 +37,18 @@ cd Sweetbook-Vibe
 cp .env.example .env
 ```
 
-OpenAI API 키 없이도 실행됩니다. 키가 없으면 Mock 보조 정리자가 동작합니다.
+Gemini API 키 없이도 실행됩니다. 키가 없으면 Mock 보조 정리자가 동작합니다.
 
-OpenAI 보조 정리자를 사용하려면 `.env`에 값을 넣습니다.
+Gemini 보조 정리자를 사용하려면 `.env`에 값을 넣습니다.
 
 ```bash
-OPENAI_API_KEY=your_api_key_here
-OPENAI_MODEL=gpt-5.4
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 실제 키는 반드시 로컬 `.env`에만 넣습니다. `.env`는 `.gitignore` 대상이며 커밋하지 않습니다. README, 이슈, 커밋 메시지, 문서에는 실제 키를 적지 않습니다.
 
-OpenAI 경로가 정상 동작하면 `챕터 제안` 응답의 `source`가 `openai`로 내려옵니다. OpenAI 계정의 쿼터나 결제 상태 문제로 `429 insufficient_quota`가 발생하면 앱은 자동으로 `source: "mock"` 제안으로 전환됩니다.
+Gemini 경로가 정상 동작하면 `챕터 제안` 응답의 `source`가 `gemini`로 내려옵니다. Gemini API 키가 없거나 호출에 실패하면 앱은 자동으로 `source: "mock"` 제안으로 전환됩니다.
 
 ### 3. Docker로 실행
 
@@ -156,7 +156,7 @@ Browser
 | 도구 | 활용 내용 |
 |---|---|
 | Codex | 과제 요구사항 분석, 하네스 구성, 제품 명세 작성, 구현, 테스트, README 작성 |
-| OpenAI API 선택 옵션 | `.env`에 키가 있을 때 SDK와 구조화 출력으로 성장기록 기반 챕터 제안을 생성하도록 설계 |
+| Gemini API 선택 옵션 | `.env`에 키가 있을 때 SDK와 구조화 출력으로 성장기록 기반 챕터 제안을 생성하도록 설계 |
 | Mock 보조 정리자 | API 키가 없어도 동일한 사용자 플로우를 검증할 수 있도록 fallback 구현 |
 
 ## 설계 의도

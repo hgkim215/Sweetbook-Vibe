@@ -21,7 +21,7 @@ function App() {
   const [activeRecord, setActiveRecord] = useState<GrowthRecord | null>(null);
   const [activeOrder, setActiveOrder] = useState<OrderDetail | null>(null);
   const [chapters, setChapters] = useState<ChapterSuggestion[]>([]);
-  const [assistantSource, setAssistantSource] = useState<'openai' | 'mock' | null>(null);
+  const [assistantSource, setAssistantSource] = useState<'gemini' | 'mock' | null>(null);
   const [orderTitle, setOrderTitle] = useState('나의 성장기록집');
   const [authorName, setAuthorName] = useState('GrowthBook 사용자');
   const [requestMemo, setRequestMemo] = useState('시간순 흐름과 변화가 잘 보이게 구성해주세요.');
@@ -72,10 +72,10 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ recordIds: selectedRecordIds })
     });
-    const data = await response.json() as { source: 'openai' | 'mock'; chapters: ChapterSuggestion[] };
+    const data = await response.json() as { source: 'gemini' | 'mock'; chapters: ChapterSuggestion[] };
     setAssistantSource(data.source);
     setChapters(data.chapters);
-    setMessage(data.source === 'openai' ? 'OpenAI 보조 정리자가 챕터를 제안했습니다.' : 'Mock 보조 정리자가 챕터를 제안했습니다.');
+    setMessage(data.source === 'gemini' ? 'Gemini 보조 정리자가 챕터를 제안했습니다.' : 'Mock 보조 정리자가 챕터를 제안했습니다.');
   }
 
   async function createOrder() {
@@ -227,7 +227,7 @@ function App() {
             <input value={authorName} onChange={(e) => setAuthorName(e.target.value)} placeholder="작성자명" />
             <textarea value={requestMemo} onChange={(e) => setRequestMemo(e.target.value)} placeholder="요청사항" />
             <button onClick={createOrder} disabled={selectedRecordIds.length === 0}>주문 생성</button>
-            {assistantSource && <p className="helper">보조 정리자: {assistantSource === 'openai' ? 'OpenAI' : 'Mock fallback'}</p>}
+            {assistantSource && <p className="helper">보조 정리자: {assistantSource === 'gemini' ? 'Gemini' : 'Mock fallback'}</p>}
           </div>
           <div className="chapterList">
             {chapters.map((chapter, index) => (
@@ -300,4 +300,3 @@ function label(category: GrowthCategory) {
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
-

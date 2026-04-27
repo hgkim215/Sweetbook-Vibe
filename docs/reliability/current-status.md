@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: 제출 가능 상태, 다음 품질 반복 개선 항목 탐색
+- 현재 단계: Gemini API 전환 완료, Docker 재검증 대기
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,17 +17,18 @@
 
 ## 진행 중
 
-- OpenAI SDK 구조화 출력 전환 완료
-- 실제 OpenAI 경로 재검증 완료
+- Gemini SDK 구조화 출력 전환 완료
+- 로컬 `.env`를 Gemini 키 기준으로 전환 완료
+- 키 미설정 Mock fallback 확인 완료
 - Lv1-Lv3 API smoke test 추가 완료
 - 테스트용 Docker 볼륨 정리 개선 완료
 - `origin/dev`와 `origin/main` 반영 완료
 
 ## 다음 작업
 
-1. 다음 품질 반복 개선 항목 탐색
-2. 필요 시 README 기준 실행 재확인
-3. 필요 시 면접 발표/제출 설명 자료 준비
+1. Docker Desktop 준비 후 `scripts/verify-full.sh` 재실행
+2. 통과 시 `dev`와 `main` 반영
+3. Gemini 키를 넣은 뒤 실제 `source: "gemini"` 경로 검증
 
 ## 최근 검증
 
@@ -52,14 +53,18 @@
 - Lv1-Lv3 API smoke test: 통과
 - 테스트용 Docker 볼륨 제거: 통과
 - Lv1-Lv3 API smoke test 포함 `scripts/verify-full.sh`: 통과
+- Gemini SDK 구조화 출력 자동 테스트: 통과
+- Gemini 키 미설정 Mock fallback 실제 엔드포인트 검증: 통과
+- Gemini 전환 후 `npm run build`: 통과
+- Gemini 전환 후 `scripts/verify-full.sh`: Docker 데몬 미준비로 Docker 단계에서 중단
 
 ## 최근 반영
 
-- OpenAI 보조 정리자를 SDK와 구조화 출력 기반으로 전환하고 `origin/dev`, `origin/main`에 반영했다. Docker 전체 검증에 Lv1-Lv3 API 플로우 smoke test를 추가했고, 테스트 데이터 볼륨을 남기지 않도록 정리 방식을 보강했다.
+- OpenAI API 과금 한계 때문에 AI 공급자를 Gemini API로 교체했다. Gemini 키는 `.env`의 `GEMINI_API_KEY`에 넣는다. 현재 키는 비어 있으며, 키가 없으면 Mock fallback이 정상 동작한다.
 
 ## 주의사항
 
 - 실제 `api.sweetbook.com`은 호출하지 않는다.
-- OpenAI API 키는 로컬 `.env`에만 두고 커밋하지 않는다.
-- OpenAI API 키가 없어도 Mock 보조 정리자가 동작해야 한다.
+- Gemini API 키는 로컬 `.env`에만 두고 커밋하지 않는다.
+- Gemini API 키가 없어도 Mock 보조 정리자가 동작해야 한다.
 - README는 처음 보는 사람이 바로 실행할 수 있는 제출용 문서로 유지한다.

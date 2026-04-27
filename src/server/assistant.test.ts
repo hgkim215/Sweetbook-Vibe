@@ -1,19 +1,24 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { GrowthRecord } from '../shared/types.js';
 
-const openAIMock = vi.hoisted(() => ({
+const geminiMock = vi.hoisted(() => ({
   constructor: vi.fn(),
-  parse: vi.fn()
+  generateContent: vi.fn()
 }));
 
-vi.mock('openai', () => ({
-  default: class MockOpenAI {
-    responses = {
-      parse: openAIMock.parse
+vi.mock('@google/genai', () => ({
+  Type: {
+    OBJECT: 'OBJECT',
+    ARRAY: 'ARRAY',
+    STRING: 'STRING'
+  },
+  GoogleGenAI: class MockGoogleGenAI {
+    models = {
+      generateContent: geminiMock.generateContent
     };
 
     constructor(config: unknown) {
-      openAIMock.constructor(config);
+      geminiMock.constructor(config);
     }
   }
 }));
@@ -37,22 +42,24 @@ const records: GrowthRecord[] = [
   }
 ];
 
-const originalApiKey = process.env.OPENAI_API_KEY;
-const originalModel = process.env.OPENAI_MODEL;
+const originalGeminiApiKey = process.env.GEMINI_API_KEY;
+const originalGoogleApiKey = process.env.GOOGLE_API_KEY;
+const originalModel = process.env.GEMINI_MODEL;
 
 afterEach(() => {
-  process.env.OPENAI_API_KEY = originalApiKey;
-  process.env.OPENAI_MODEL = originalModel;
-  openAIMock.constructor.mockReset();
-  openAIMock.parse.mockReset();
+  process.env.GEMINI_API_KEY = originalGeminiApiKey;
+  process.env.GOOGLE_API_KEY = originalGoogleApiKey;
+  process.env.GEMINI_MODEL = originalModel;
+  geminiMock.constructor.mockReset();
+  geminiMock.generateContent.mockReset();
 });
 
 describe('AI 보조 정리자', () => {
-  it('OpenAI SDK 구조화 출력 성공 시 OpenAI 챕터 제안을 반환한다', async () => {
-    process.env.OPENAI_API_KEY = 'test-key';
-    process.env.OPENAI_MODEL = 'gpt-5.4';
-    openAIMock.parse.mockResolvedValueOnce({
-      output_parsed: {
+  it('Gemini 구조화 출력 성공 시 Gemini 챕터 제안을 반환한다', async () => {
+    process.env.GEMINI_API_KEY = 'test-key';
+    process.env.GEMINI_MODEL = 'gemini-2.5-flash';
+    geminiMock.generateContent.mockResolvedValueOnce({
+      text: JSON.stringify({
         chapters: [
           {
             title: '프로젝트 성장',
@@ -61,12 +68,12 @@ describe('AI 보조 정리자', () => {
             missingQuestions: ['결과를 숫자로 표현할 수 있나요?']
           }
         ]
-      }
+      })
     });
 
     const result = await suggestChapters(records);
 
-    expect(result.source).toBe('openai');
+    expect(result.source).toBe('gemini');
     expect(result.chapters).toEqual([
       {
         title: '프로젝트 성장',
@@ -75,24 +82,28 @@ describe('AI 보조 정리자', () => {
         missingQuestions: ['결과를 숫자로 표현할 수 있나요?']
       }
     ]);
-    expect(openAIMock.constructor).toHaveBeenCalledWith({ apiKey: 'test-key' });
-    expect(openAIMock.parse).toHaveBeenCalledWith(expect.objectContaining({ model: 'gpt-5.4' }));
+    expect(geminiMock.constructor).toHaveBeenCalledWith({ apiKey: 'test-key' });
+    expect(geminiMock.generateContent).toHaveBeenCalledWith(expect.objectContaining({
+      model: 'gemini-2.5-flash',
+      config: expect.objectContaining({ responseMimeType: 'application/json' })
+    }));
   });
 
-  it('키가 없으면 OpenAI SDK를 호출하지 않고 Mock 챕터 제안을 반환한다', async () => {
-    process.env.OPENAI_API_KEY = '';
+  it('키가 없으면 Gemini SDK를 호출하지 않고 Mock 챕터 제안을 반환한다', async () => {
+    process.env.GEMINI_API_KEY = '';
+    process.env.GOOGLE_API_KEY = '';
 
     const result = await suggestChapters(records);
 
     expect(result.source).toBe('mock');
     expect(result.chapters).toHaveLength(1);
-    expect(openAIMock.constructor).not.toHaveBeenCalled();
-    expect(openAIMock.parse).not.toHaveBeenCalled();
+    expect(geminiMock.constructor).not.toHaveBeenCalled();
+    expect(geminiMock.generateContent).not.toHaveBeenCalled();
   });
 
-  it('OpenAI API 429 오류가 나면 Mock 챕터 제안으로 fallback한다', async () => {
-    process.env.OPENAI_API_KEY = 'test-key';
-    openAIMock.parse.mockRejectedValueOnce(Object.assign(new Error('quota exceeded'), {
+  it('Gemini API 오류가 나면 Mock 챕터 제안으로 fallback한다', async () => {
+    process.env.GEMINI_API_KEY = 'test-key';
+    geminiMock.generateContent.mockRejectedValueOnce(Object.assign(new Error('quota exceeded'), {
       status: 429,
       code: 'rate_limit_exceeded'
     }));
@@ -104,21 +115,10 @@ describe('AI 보조 정리자', () => {
     expect(result.chapters[0].recordIds).toEqual(['record-1']);
   });
 
-  it('refusal 또는 구조화 출력 누락 시 Mock 챕터 제안으로 fallback한다', async () => {
-    process.env.OPENAI_API_KEY = 'test-key';
-    openAIMock.parse.mockResolvedValueOnce({
-      output_parsed: null,
-      output: [
-        {
-          type: 'message',
-          content: [
-            {
-              type: 'refusal',
-              refusal: '요청을 처리할 수 없습니다.'
-            }
-          ]
-        }
-      ]
+  it('구조화 출력 누락 시 Mock 챕터 제안으로 fallback한다', async () => {
+    process.env.GEMINI_API_KEY = 'test-key';
+    geminiMock.generateContent.mockResolvedValueOnce({
+      text: JSON.stringify({ chapters: [] })
     });
 
     const result = await suggestChapters(records);

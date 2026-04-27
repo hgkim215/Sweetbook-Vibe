@@ -1,32 +1,45 @@
-import OpenAI from 'openai';
-import { zodTextFormat } from 'openai/helpers/zod';
-import { z } from 'zod';
+import { GoogleGenAI, Type } from '@google/genai';
 import type { ChapterSuggestion, GrowthRecord } from '../shared/types.js';
 
-const ChapterSuggestionSchema = z.object({
-  title: z.string().min(1),
-  summary: z.string().min(1),
-  recordIds: z.array(z.string()).min(1),
-  missingQuestions: z.array(z.string()).default([])
-});
+const chapterSuggestionsSchema = {
+  type: Type.OBJECT,
+  properties: {
+    chapters: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          title: { type: Type.STRING },
+          summary: { type: Type.STRING },
+          recordIds: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+          },
+          missingQuestions: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+          }
+        },
+        required: ['title', 'summary', 'recordIds', 'missingQuestions']
+      }
+    }
+  },
+  required: ['chapters']
+};
 
-const ChapterSuggestionsSchema = z.object({
-  chapters: z.array(ChapterSuggestionSchema)
-});
-
-export async function suggestChapters(records: GrowthRecord[]): Promise<{ source: 'openai' | 'mock'; chapters: ChapterSuggestion[] }> {
+export async function suggestChapters(records: GrowthRecord[]): Promise<{ source: 'gemini' | 'mock'; chapters: ChapterSuggestion[] }> {
   if (records.length === 0) {
     return { source: 'mock', chapters: [] };
   }
 
-  if (process.env.OPENAI_API_KEY) {
+  if (geminiApiKey()) {
     try {
-      const chapters = await suggestWithOpenAI(records);
+      const chapters = await suggestWithGemini(records);
       if (chapters.length > 0) {
-        return { source: 'openai', chapters };
+        return { source: 'gemini', chapters };
       }
     } catch (error) {
-      console.warn('[assistant] OpenAI 제안 실패, Mock 제안으로 전환합니다.', openAIErrorSummary(error));
+      console.warn('[assistant] Gemini 제안 실패, Mock 제안으로 전환합니다.', aiErrorSummary(error));
     }
   }
 
@@ -51,44 +64,51 @@ function suggestWithRules(records: GrowthRecord[]): ChapterSuggestion[] {
   }));
 }
 
-async function suggestWithOpenAI(records: GrowthRecord[]): Promise<ChapterSuggestion[]> {
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const response = await client.responses.parse({
-    model: process.env.OPENAI_MODEL || 'gpt-5.4',
-    input: [
-      {
-        role: 'system',
-        content: [
-          {
-            type: 'input_text',
-            text: [
-              '너는 GrowthBook의 성장기록집 챕터 구성을 돕는 보조 정리자다.',
-              '사용자가 작성한 성장기록에 없는 사실은 만들지 않는다.',
-              '챕터는 1개 이상 제안하되, recordIds는 입력으로 받은 성장기록 id만 사용한다.',
-              'missingQuestions는 사용자가 보완하면 좋은 질문만 간결하게 작성한다.'
-            ].join('\n')
-          }
-        ]
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: `아래 성장기록으로 성장기록집 챕터를 제안해줘.\n\n${JSON.stringify(records, null, 2)}`
-          }
-        ]
-      }
+async function suggestWithGemini(records: GrowthRecord[]): Promise<ChapterSuggestion[]> {
+  const client = new GoogleGenAI({ apiKey: geminiApiKey() });
+  const response = await client.models.generateContent({
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    contents: [
+      [
+        '너는 GrowthBook의 성장기록집 챕터 구성을 돕는 보조 정리자다.',
+        '사용자가 작성한 성장기록에 없는 사실은 만들지 않는다.',
+        '챕터는 1개 이상 제안하되, recordIds는 입력으로 받은 성장기록 id만 사용한다.',
+        'missingQuestions는 사용자가 보완하면 좋은 질문만 간결하게 작성한다.',
+        '',
+        `아래 성장기록으로 성장기록집 챕터를 JSON으로 제안해줘.\n${JSON.stringify(records, null, 2)}`
+      ].join('\n')
     ],
-    text: {
-      format: zodTextFormat(ChapterSuggestionsSchema, 'growthbook_chapter_suggestions')
+    config: {
+      responseMimeType: 'application/json',
+      responseSchema: chapterSuggestionsSchema
     }
   });
 
-  return normalizeOpenAIChapters(response.output_parsed?.chapters ?? [], records);
+  const parsed = parseGeminiChapters(response.text);
+  return normalizeAIChapters(parsed.chapters, records);
 }
 
-function normalizeOpenAIChapters(chapters: ChapterSuggestion[], records: GrowthRecord[]) {
+function parseGeminiChapters(text: string | undefined): { chapters: ChapterSuggestion[] } {
+  if (!text) return { chapters: [] };
+  const parsed = JSON.parse(text) as { chapters?: unknown };
+  if (!Array.isArray(parsed.chapters)) return { chapters: [] };
+  return {
+    chapters: parsed.chapters.filter(isChapterSuggestion)
+  };
+}
+
+function isChapterSuggestion(value: unknown): value is ChapterSuggestion {
+  if (!value || typeof value !== 'object') return false;
+  const chapter = value as Partial<ChapterSuggestion>;
+  return typeof chapter.title === 'string'
+    && typeof chapter.summary === 'string'
+    && Array.isArray(chapter.recordIds)
+    && chapter.recordIds.every((id) => typeof id === 'string')
+    && Array.isArray(chapter.missingQuestions)
+    && chapter.missingQuestions.every((question) => typeof question === 'string');
+}
+
+function normalizeAIChapters(chapters: ChapterSuggestion[], records: GrowthRecord[]) {
   const allowedIds = new Set(records.map((record) => record.id));
   return chapters
     .map((chapter) => ({
@@ -100,9 +120,13 @@ function normalizeOpenAIChapters(chapters: ChapterSuggestion[], records: GrowthR
     .filter((chapter) => chapter.title && chapter.summary && chapter.recordIds.length > 0);
 }
 
-function openAIErrorSummary(error: unknown) {
+function geminiApiKey() {
+  return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+}
+
+function aiErrorSummary(error: unknown) {
   if (!(error instanceof Error)) {
-    return { message: '알 수 없는 OpenAI 오류' };
+    return { message: '알 수 없는 Gemini 오류' };
   }
   const maybeApiError = error as Error & { status?: number; code?: string; type?: string };
   return {

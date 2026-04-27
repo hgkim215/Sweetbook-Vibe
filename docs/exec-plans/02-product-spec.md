@@ -9,7 +9,7 @@
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
 - 책 결과물: 성장기록집
-- AI 역할: OpenAI 선택 옵션 + 규칙 기반 Mock fallback
+- AI 역할: Gemini 선택 옵션 + 규칙 기반 Mock fallback
 - 책 구성 방식: 자동 제안 후 사용자 수정
 - 상태 문서: `docs/reliability/current-status.md`
 
@@ -22,4 +22,3 @@
 ## 다음 단계
 
 앱 스캐폴딩과 검증 스크립트 정비를 진행한다.
-

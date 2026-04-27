@@ -36,3 +36,8 @@
 | 2026-04-28 | Docker 검증 볼륨 정리 개선 | 완료 | 전체 검증이 테스트용 Compose project를 사용하고 검증 후 볼륨을 제거하도록 보강했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | 테스트용 Compose project, Lv1-Lv3 API smoke test, 볼륨 제거까지 포함해 전체 검증이 통과했다. |
 | 2026-04-28 | `origin/dev`, `origin/main` 반영 | 완료 | Lv1-Lv3 API smoke test와 Docker 검증 볼륨 정리 개선을 두 브랜치에 반영했다. |
+| 2026-04-28 | Gemini API 전환 | 완료 | OpenAI API 과금 한계로 AI 보조 정리자를 Gemini API 기반으로 교체했다. 키 위치는 로컬 `.env`의 `GEMINI_API_KEY`로 고정한다. |
+| 2026-04-28 | `scripts/verify-fast.sh` | 통과 | Gemini SDK 구조화 출력 전환 후 lint, typecheck, test가 통과했다. |
+| 2026-04-28 | Gemini 키 미설정 fallback 엔드포인트 검증 | 통과 | `.env`에 Gemini 키가 없는 상태에서 HTTP 200, `source: "mock"`, 챕터 2개를 확인했다. |
+| 2026-04-28 | `npm run build` | 통과 | Gemini 전환 후 Vite 프론트엔드와 Express 서버 TypeScript 빌드가 통과했다. |
+| 2026-04-28 | `scripts/verify-full.sh` | 환경 중단 | lint, typecheck, test, build는 통과했지만 Docker 데몬이 준비되지 않아 Docker 단계에서 중단됐다. |
