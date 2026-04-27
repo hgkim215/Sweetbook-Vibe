@@ -16,3 +16,9 @@
 | 2026-04-28 | 브라우저 데스크톱/모바일 확인 | 통과 | 첫 화면이 데스크톱과 모바일에서 글자 겹침 없이 렌더링됐다. |
 | 2026-04-28 | API 수동 플로우 | 통과 | 더미 기록 조회, Mock 챕터 제안, 주문 생성, 상태 변경, JSON 익스포트를 확인했다. |
 | 2026-04-28 | `main` 반영 | 완료 | `dev`와 `main`을 최신 커밋으로 맞추고 GitHub 기본 브랜치를 `main`으로 변경했다. |
+| 2026-04-28 | OpenAI 키 로컬 `.env` 등록 | 완료 | 실제 키는 `.env`에만 저장했고 `git status --short`에 보이지 않음을 확인했다. |
+| 2026-04-28 | OpenAI 실제 경로 엔드포인트 검증 | 제한적 통과 | `.env` 키를 로드해 `/api/assist/chapter-suggestions`를 호출했으나 OpenAI API가 `429`를 반환했다. 앱은 `source: "mock"`으로 정상 fallback했다. |
+| 2026-04-28 | 키 없는 환경 fallback 엔드포인트 검증 | 통과 | `OPENAI_API_KEY=` 상태로 서버를 실행하고 같은 엔드포인트가 `source: "mock"`, 챕터 2개를 반환함을 확인했다. |
+| 2026-04-28 | `scripts/verify-fast.sh` | 통과 | `.env` 로더, OpenAI 오류 fallback 테스트, JSON 파싱 실패 fallback 테스트가 포함된 빠른 검증이 통과했다. |
+| 2026-04-28 | Docker build context 보안 점검 | 보완 | `.env`가 Docker build context에 포함될 수 있어 `.dockerignore`를 추가했다. |
+| 2026-04-28 | `scripts/verify-full.sh` | 통과 | `.dockerignore` 반영 후 lint, typecheck, test, build, Docker Compose, `/api/health` smoke test가 통과했다. Docker build context는 약 9KB로 줄어 로컬 비밀값과 산출물이 제외됐다. |

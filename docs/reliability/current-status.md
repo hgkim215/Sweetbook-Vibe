@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: 제출 가능 상태
+- 현재 단계: OpenAI 키 포함 품질 반복 개선 완료, 커밋/푸시 준비
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,13 +17,14 @@
 
 ## 진행 중
 
-- 품질점수 반복 개선 대기
+- 검증 결과 커밋/푸시 준비
 
 ## 다음 작업
 
-1. 구글폼 제출
-2. 필요 시 품질점수 반복 개선
-3. 면접 발표 자료 준비
+1. 변경 파일 커밋
+2. `origin/dev` 푸시
+3. 제출 안정성 변경으로 판단되면 `main` 반영
+4. 다음 품질 반복 개선 항목 탐색
 
 ## 최근 검증
 
@@ -34,13 +35,20 @@
 - API 수동 플로우: 통과
 - `main` 브랜치 반영: 완료
 - GitHub 기본 브랜치 `main`: 완료
+- `.env` Git 무시 확인: 통과
+- OpenAI 실제 경로 검증: OpenAI API `429` 응답으로 Mock fallback 전환 확인
+- 키 없는 환경의 Mock fallback 엔드포인트 검증: 통과
+- OpenAI API 오류/JSON 파싱 실패 fallback 회귀 테스트: 통과
+- Docker build context 비밀값 차단: `.dockerignore` 추가
+- `scripts/verify-full.sh`: 통과
 
 ## 최근 커밋
 
-- `5e6ba98 docs: refresh final status`
+- `17cb446 docs: mark submission ready`
 
 ## 주의사항
 
 - 실제 `api.sweetbook.com`은 호출하지 않는다.
+- OpenAI API 키는 로컬 `.env`에만 두고 커밋하지 않는다.
 - OpenAI API 키가 없어도 Mock 보조 정리자가 동작해야 한다.
 - README는 처음 보는 사람이 바로 실행할 수 있는 제출용 문서로 유지한다.
