@@ -63,6 +63,10 @@ function App() {
   async function deleteRecord(id: string) {
     await fetch(`/api/records/${id}`, { method: 'DELETE' });
     setSelectedRecordIds((current) => current.filter((recordId) => recordId !== id));
+    if (activeRecord?.id === id) {
+      setActiveRecord(null);
+      setForm(recordForm());
+    }
     await refresh();
   }
 
@@ -133,143 +137,211 @@ function App() {
     });
   }
 
+  function startNewRecord() {
+    setActiveRecord(null);
+    setForm(recordForm());
+  }
+
   return (
-    <main>
-      <section className="hero">
-        <div>
+    <main className="appShell">
+      <header className="appHeader">
+        <div className="brandBlock">
           <p className="eyebrow">GrowthBook</p>
-          <h1>흩어진 성장 기록을 한 권의 성장기록집으로</h1>
-          <p className="lead">프로젝트, 학습, 실패, 개선의 흔적을 정리하고 선택한 기록을 책 주문 데이터로 내보냅니다.</p>
+          <h1>성장기록 작업대</h1>
+          <p>기록을 정리하고, 선택한 경험을 성장기록집 주문 데이터로 전환합니다.</p>
         </div>
-        <div className="heroPanel">
-          <strong>{records.length}</strong>
-          <span>성장기록</span>
-          <strong>{orders.length}</strong>
-          <span>성장기록집 주문</span>
+        <div className="headerTools">
+          <div className="metric">
+            <strong>{records.length}</strong>
+            <span>기록</span>
+          </div>
+          <div className="metric">
+            <strong>{selectedRecords.length}</strong>
+            <span>선택</span>
+          </div>
+          <div className="metric">
+            <strong>{orders.length}</strong>
+            <span>주문</span>
+          </div>
+          <button type="button" className="secondaryButton" onClick={startNewRecord}>새 기록</button>
         </div>
-      </section>
+      </header>
 
-      {message && <div className="notice">{message}</div>}
+      {message && <div className="notice" role="status">{message}</div>}
 
-      <section className="workspace">
-        <aside className="sidebar">
-          <h2>성장기록</h2>
-          <p>책에 포함할 기록을 선택하세요.</p>
+      <section className="workspaceGrid">
+        <aside className="pane recordPane">
+          <div className="paneHeader">
+            <div>
+              <h2>성장기록</h2>
+              <p>편집할 기록과 책에 넣을 기록을 고릅니다.</p>
+            </div>
+            <span className="countBadge">{selectedRecords.length}개 선택</span>
+          </div>
           <div className="recordList">
-            {records.map((record) => (
-              <button key={record.id} className="recordRow" onClick={() => setActiveRecord(record)}>
+            {records.map((record) => {
+              const isSelected = selectedRecordIds.includes(record.id);
+              const isActive = activeRecord?.id === record.id;
+              return (
+              <div key={record.id} className={`recordRow ${isSelected ? 'selected' : ''} ${isActive ? 'active' : ''}`}>
                 <input
                   type="checkbox"
-                  checked={selectedRecordIds.includes(record.id)}
-                  onClick={(event) => event.stopPropagation()}
+                  aria-label={`${record.title} 책 포함 선택`}
+                  checked={isSelected}
                   onChange={(event) => {
                     setSelectedRecordIds((current) =>
                       event.target.checked ? [...current, record.id] : current.filter((id) => id !== record.id)
                     );
                   }}
                 />
-                <span>
-                  <b>{record.title}</b>
-                  <small>{label(record.category)} · {record.recordDate}</small>
-                </span>
-              </button>
-            ))}
+                <button type="button" className="recordSelect" onClick={() => editRecord(record)}>
+                  <span className="rowTitle">{record.title}</span>
+                  <span className="rowMeta">{label(record.category)} · {record.recordDate}</span>
+                  <span className="rowSummary">{record.summary}</span>
+                </button>
+              </div>
+              );
+            })}
           </div>
         </aside>
 
-        <section className="content">
-          <div className="sectionHeader">
+        <section className="pane editorPane">
+          <div className="paneHeader">
             <div>
               <h2>{activeRecord ? '성장기록 상세/수정' : '새 성장기록'}</h2>
               <p>문제, 행동, 배운 점, 결과를 한 번에 남깁니다.</p>
             </div>
             {activeRecord && (
-              <button className="ghost" onClick={() => { setActiveRecord(null); setForm(recordForm()); }}>새 기록</button>
+              <button type="button" className="ghostButton" onClick={startNewRecord}>새 기록</button>
             )}
           </div>
 
           <form className="recordForm" onSubmit={saveRecord}>
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="제목" />
-            <div className="grid2">
-              <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as GrowthCategory })}>
-                {categories.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
-              </select>
-              <input type="date" value={form.recordDate} onChange={(e) => setForm({ ...form, recordDate: e.target.value })} />
+            <Field label="제목" className="wide">
+              <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="예: Docker 실행 오류를 해결한 경험" />
+            </Field>
+            <div className="fieldGrid">
+              <Field label="카테고리">
+                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as GrowthCategory })}>
+                  {categories.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+                </select>
+              </Field>
+              <Field label="기록일">
+                <input type="date" value={form.recordDate} onChange={(e) => setForm({ ...form, recordDate: e.target.value })} />
+              </Field>
             </div>
-            <input value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} placeholder="한 줄 요약" />
-            <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="상황과 내가 한 행동" />
-            <div className="grid2">
-              <textarea value={form.lesson} onChange={(e) => setForm({ ...form, lesson: e.target.value })} placeholder="배운 점" />
-              <textarea value={form.result} onChange={(e) => setForm({ ...form, result: e.target.value })} placeholder="결과" />
+            <Field label="한 줄 요약" className="wide">
+              <input value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} placeholder="무엇을 해결했고 무엇이 달라졌는지 짧게 적습니다." />
+            </Field>
+            <Field label="상황과 내가 한 행동" className="wide">
+              <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="문제 상황, 판단, 실행 과정을 적습니다." />
+            </Field>
+            <div className="fieldGrid">
+              <Field label="배운 점">
+                <textarea value={form.lesson} onChange={(e) => setForm({ ...form, lesson: e.target.value })} placeholder="다음에도 가져갈 원칙을 적습니다." />
+              </Field>
+              <Field label="결과">
+                <textarea value={form.result} onChange={(e) => setForm({ ...form, result: e.target.value })} placeholder="검증 결과나 변화한 지점을 적습니다." />
+              </Field>
             </div>
-            <input value={form.nextAction} onChange={(e) => setForm({ ...form, nextAction: e.target.value })} placeholder="다음 행동" />
-            <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="태그: 쉼표로 구분" />
-            <div className="actions">
+            <Field label="다음 행동" className="wide">
+              <input value={form.nextAction} onChange={(e) => setForm({ ...form, nextAction: e.target.value })} placeholder="이어갈 개선이나 확인할 일을 적습니다." />
+            </Field>
+            <Field label="태그" className="wide">
+              <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="Docker, 검증, 문제해결" />
+            </Field>
+            <div className="actionBar">
               <button type="submit">{activeRecord ? '수정 저장' : '기록 추가'}</button>
-              {activeRecord && <button type="button" className="danger" onClick={() => deleteRecord(activeRecord.id)}>삭제</button>}
+              {activeRecord && <button type="button" className="dangerButton" onClick={() => deleteRecord(activeRecord.id)}>삭제</button>}
             </div>
           </form>
         </section>
-      </section>
 
-      <section className="orderArea">
-        <div className="sectionHeader">
-          <div>
-            <h2>성장기록집 주문</h2>
-            <p>선택한 {selectedRecords.length}개 기록을 챕터로 묶고 주문 상태를 관리합니다.</p>
+        <aside className="pane orderPane">
+          <div className="paneHeader">
+            <div>
+              <h2>성장기록집</h2>
+              <p>선택한 기록을 챕터로 묶고 주문합니다.</p>
+            </div>
+            <StatusBadge source={assistantSource} />
           </div>
-          <button onClick={suggest} disabled={selectedRecordIds.length === 0}>챕터 제안</button>
-        </div>
 
-        <div className="orderGrid">
-          <div>
-            <input value={orderTitle} onChange={(e) => setOrderTitle(e.target.value)} placeholder="책 제목" />
-            <input value={authorName} onChange={(e) => setAuthorName(e.target.value)} placeholder="작성자명" />
-            <textarea value={requestMemo} onChange={(e) => setRequestMemo(e.target.value)} placeholder="요청사항" />
+          <div className="selectionSummary">
+            <span>선택 기록 <strong>{selectedRecords.length}</strong></span>
+            <span>챕터 <strong>{chapters.length}</strong></span>
+          </div>
+
+          <div className="orderForm">
+            <Field label="책 제목">
+              <input value={orderTitle} onChange={(e) => setOrderTitle(e.target.value)} placeholder="나의 성장기록집" />
+            </Field>
+            <Field label="작성자명">
+              <input value={authorName} onChange={(e) => setAuthorName(e.target.value)} placeholder="GrowthBook 사용자" />
+            </Field>
+            <Field label="요청사항">
+              <textarea value={requestMemo} onChange={(e) => setRequestMemo(e.target.value)} placeholder="구성 방향이나 강조할 흐름을 적습니다." />
+            </Field>
+            <button type="button" className="secondaryButton" onClick={suggest} disabled={selectedRecordIds.length === 0}>챕터 제안</button>
             <button onClick={createOrder} disabled={selectedRecordIds.length === 0}>주문 생성</button>
-            {assistantSource && <p className="helper">보조 정리자: {assistantSource === 'gemini' ? 'Gemini' : 'Mock fallback'}</p>}
           </div>
+
           <div className="chapterList">
-            {chapters.map((chapter, index) => (
-              <article key={`${chapter.title}-${index}`}>
+            {chapters.length === 0 ? (
+              <p className="emptyState">기록을 선택하고 챕터 제안을 실행하면 구성안이 표시됩니다.</p>
+            ) : chapters.map((chapter, index) => (
+              <article key={`${chapter.title}-${index}`} className="chapterItem">
                 <input
+                  aria-label={`${index + 1}번째 챕터 제목`}
                   value={chapter.title}
                   onChange={(e) => setChapters((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, title: e.target.value } : item))}
                 />
                 <p>{chapter.summary}</p>
-                <small>{chapter.recordIds.length}개 기록 · 질문 {chapter.missingQuestions.length}개</small>
+                <small>{chapter.recordIds.length}개 기록 · 보완 질문 {chapter.missingQuestions.length}개</small>
               </article>
             ))}
           </div>
-        </div>
+        </aside>
       </section>
 
-      <section className="orders">
-        <div>
-          <h2>주문 목록</h2>
+      <section className="ordersBoard">
+        <div className="pane ordersListPane">
+          <div className="paneHeader">
+            <div>
+              <h2>주문 목록</h2>
+              <p>생성된 성장기록집 주문을 확인합니다.</p>
+            </div>
+          </div>
           {orders.map((order) => (
-            <button key={order.id} className="orderRow" onClick={() => openOrder(order.id)}>
-              <b>{order.title}</b>
-              <span>{order.status}</span>
+            <button key={order.id} className={`orderRow ${activeOrder?.id === order.id ? 'active' : ''}`} onClick={() => openOrder(order.id)}>
+              <span>
+                <b>{order.title}</b>
+                <small>{order.createdAt.slice(0, 10)}</small>
+              </span>
+              <em>{statusLabel(order.status)}</em>
             </button>
           ))}
         </div>
-        <div className="orderDetail">
-          <h2>주문 상세</h2>
+        <div className="pane orderDetailPane">
+          <div className="paneHeader">
+            <div>
+              <h2>주문 상세</h2>
+              <p>상태를 바꾸고 제출용 JSON을 내려받습니다.</p>
+            </div>
+          </div>
           {activeOrder ? (
-            <>
+            <div className="detailStack">
               <h3>{activeOrder.title}</h3>
               <p>{activeOrder.requestMemo}</p>
               <div className="statusButtons">
                 {(['pending', 'processing', 'completed', 'cancelled'] as OrderStatus[]).map((status) => (
-                  <button key={status} onClick={() => updateStatus(status)} className={activeOrder.status === status ? 'active' : ''}>{status}</button>
+                  <button type="button" key={status} onClick={() => updateStatus(status)} className={activeOrder.status === status ? 'active' : ''}>{statusLabel(status)}</button>
                 ))}
               </div>
               <a className="download" href={`/api/orders/${activeOrder.id}/export`}>JSON 다운로드</a>
               <p className="helper">포함 기록 {activeOrder.records.length}개 · 챕터 {activeOrder.chapters.length}개</p>
-            </>
+            </div>
           ) : (
-            <p>주문을 선택하면 상세와 익스포트 버튼이 표시됩니다.</p>
+            <p className="emptyState">주문을 선택하면 상태와 익스포트 버튼이 표시됩니다.</p>
           )}
         </div>
       </section>
@@ -297,6 +369,30 @@ function splitTags(tags: string) {
 
 function label(category: GrowthCategory) {
   return categories.find((item) => item.value === category)?.label ?? category;
+}
+
+function statusLabel(status: OrderStatus) {
+  const labels: Record<OrderStatus, string> = {
+    pending: '대기',
+    processing: '처리 중',
+    completed: '완료',
+    cancelled: '취소'
+  };
+  return labels[status];
+}
+
+function Field({ label: fieldLabel, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
+  return (
+    <label className={`field ${className}`}>
+      <span>{fieldLabel}</span>
+      {children}
+    </label>
+  );
+}
+
+function StatusBadge({ source }: { source: 'gemini' | 'mock' | null }) {
+  if (!source) return <span className="statusBadge idle">대기</span>;
+  return <span className={`statusBadge ${source}`}>{source === 'gemini' ? 'Gemini' : 'Mock'}</span>;
 }
 
 createRoot(document.getElementById('root')!).render(<App />);

@@ -1,6 +1,6 @@
 # 품질 점수표
 
-상태: 하네스 부트스트랩 기준선.
+상태: Lv1-Lv3 구현 완료 후 UI/UX 반복 개선 중.
 
 점수는 1-5점 척도를 사용한다.
 
@@ -20,10 +20,10 @@
 | Lv1 Completeness | 5 | 성장기록 CRUD, 더미 데이터, 브라우저 첫 화면, API 테스트가 모두 통과했다. |
 | Lv2 Business Logic | 5 | 성장기록집 주문 생성, 조회, 상태 변경이 API 수동 플로우와 테스트에서 확인됐다. |
 | Lv3 Export Quality | 5 | 주문 정보, 챕터, 포함 기록, 메타데이터 JSON 익스포트가 수동 검증됐다. |
-| UX Clarity | 4 | 데스크톱/모바일 첫 화면이 정상이며 핵심 플로우가 한 화면에 모여 있다. |
+| UX Clarity | 5 | 작업 화면이 성장기록 목록, 편집, 주문 패널, 주문 상세 흐름으로 정리됐고 데스크톱/모바일 캡처와 브라우저 DOM 플로우를 통과했다. |
 | 아키텍처 | 4 | React/Vite, Express, SQLite, Docker Compose 구조와 REST API 구현이 완료됐다. |
-| Test Coverage | 4 | 핵심 API 테스트, 수동 API 플로우, 브라우저 화면 검증을 통과했다. |
-| Docker Reliability | 4 | Docker Compose 전체 검증과 health smoke test를 통과했다. |
+| Test Coverage | 5 | 핵심 API 테스트, Docker smoke test, 브라우저 DOM 플로우, UI 개편 후 fast/full 검증을 통과했다. |
+| Docker Reliability | 5 | UI 개편 후 별도 포트에서 Docker Compose 전체 검증과 Lv1-Lv3 smoke test, 볼륨 제거가 통과했다. |
 | README Quality | 4 | 실행 방법, 포트 변경, 더미 데이터, 레벨, 테스트 플로우를 포함했다. 최종 브라우저 검증 후 재확인한다. |
 
 ## 반복 개선 규칙

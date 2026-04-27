@@ -46,3 +46,9 @@
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | Gemini 전환 후 lint, typecheck, test, build, Docker Compose, `/api/health`, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
 | 2026-04-28 | Gemini 실제 경로 검증 | 보완 후 통과 | 처음에는 `.env`의 `GEMINI_MODEL=gemini-3.1-flash`가 존재하지 않아 404가 발생했다. `gemini-2.5-flash`로 정정한 뒤 HTTP 200, `source: "gemini"`, 챕터 2개, 잘못된 recordIds 0개를 확인했다. |
 | 2026-04-28 | Docker Compose project name 보정 | 통과 | 한글 폴더명에서 기본 project name이 비어 `docker compose up --build`가 실패했다. `docker-compose.yml`에 `name: growthbook`을 추가해 같은 명령으로 빌드, 기동, health, Lv1-Lv3 API smoke test가 통과했다. |
+| 2026-04-28 | GrowthBook UI/UX 작업 화면 개편 | 완료 | 큰 폼 중심 화면을 compact app header, 성장기록 목록, 중앙 편집, 성장기록집 주문 패널, 하단 주문 상세 구조로 재구성했다. |
+| 2026-04-28 | `npm run build` | 통과 | UI/UX 개편 후 Vite 프론트엔드와 Express 서버 TypeScript 빌드가 통과했다. |
+| 2026-04-28 | 브라우저 데스크톱/모바일 캡처 | 통과 | Chrome DevTools Protocol 기준 데스크톱은 1440px, 모바일은 `innerWidth=390`, `scrollWidth=390`으로 가로 넘침 없이 렌더링됐다. |
+| 2026-04-28 | 브라우저 DOM 플로우 | 통과 | 성장기록 2개 선택, Gemini 챕터 제안(`source: "Gemini"`, 챕터 2개), 주문 생성, 완료 상태 변경, JSON 다운로드 링크를 확인했다. |
+| 2026-04-28 | `scripts/verify-fast.sh` | 통과 | UI/UX 개편 후 lint, typecheck, test가 통과했다. |
+| 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | 기존 3000번 실행과 충돌하지 않도록 별도 포트에서 lint, typecheck, test, build, Docker Compose, `/api/health`, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |

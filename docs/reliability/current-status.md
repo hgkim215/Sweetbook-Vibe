@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: Docker Compose project name 보정 완료
+- 현재 단계: GrowthBook UI/UX 개선 및 반복 검증
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,20 +17,14 @@
 
 ## 진행 중
 
-- Gemini SDK 구조화 출력 전환 완료
-- 로컬 `.env`를 Gemini 키 기준으로 전환 완료
-- 키 미설정 Mock fallback 확인 완료
-- Gemini 전환 후 Docker 전체 검증 완료
-- Gemini 실제 API 경로 검증 완료
-- 한글 폴더명에서 `docker compose up --build` 실행 오류 보정 완료
-- Lv1-Lv3 API smoke test 추가 완료
-- 테스트용 Docker 볼륨 정리 개선 완료
-- Gemini 전환 `origin/dev` 반영 완료
-- Gemini 전환 `origin/main` 반영은 Docker 재검증 전까지 보류
+- Lv1-Lv3 구현 완료 상태에서 UI/UX 품질 반복 개선 중
+- 기존 큰 폼 중심 화면을 `성장기록 목록 / 기록 편집 / 성장기록집 주문` 3열 작업 화면으로 개편 완료
+- 모바일에서는 목록, 편집, 주문 영역이 순서대로 쌓이도록 반응형 레이아웃 확인 완료
+- 브라우저 DOM 조작으로 성장기록 선택, Gemini 챕터 제안, 주문 생성, 상태 변경, JSON 다운로드 링크 확인 완료
 
 ## 다음 작업
 
-1. `dev`와 `main`에 최종 반영
+1. UI/UX 개선 변경분을 `dev`와 `main`에 반영
 2. 다음 품질 반복 개선 항목 탐색
 
 ## 최근 검증
@@ -65,10 +59,16 @@
 - Gemini 실제 호출: `source: "gemini"`, 챕터 2개, 잘못된 recordIds 0개
 - `docker compose up --build -d`: 통과
 - `/api/health` 및 Lv1-Lv3 API smoke test: 통과
+- GrowthBook UI/UX 데스크톱 캡처: 통과
+- GrowthBook UI/UX 모바일 캡처: 통과, `innerWidth=390`, `scrollWidth=390`
+- 브라우저 DOM 플로우: 통과, `source: "Gemini"`, 챕터 2개, 주문 생성, 완료 상태 변경, JSON 다운로드 링크 확인
+- UI/UX 개선 후 `npm run build`: 통과
+- UI/UX 개선 후 `scripts/verify-fast.sh`: 통과
+- UI/UX 개선 후 `PORT=3002 scripts/verify-full.sh`: 통과
 
 ## 최근 반영
 
-- OpenAI API 과금 한계 때문에 AI 공급자를 Gemini API로 교체했다. Gemini 키는 `.env`의 `GEMINI_API_KEY`에 넣는다. `GEMINI_MODEL=gemini-2.5-flash`로 실제 호출이 통과했고, 한글 폴더명에서도 `docker compose up --build`가 동작하도록 Compose project name을 고정했다.
+- GrowthBook을 제출 검증자가 바로 이해할 수 있는 작업 도구 화면으로 정리했다. 상단 compact app header, 좌측 성장기록 목록, 중앙 편집 폼, 우측 성장기록집 주문 패널, 하단 주문 상세 흐름으로 재구성했고, Gemini/Mock 상태 배지를 화면에서 확인할 수 있게 했다. 변경 후 fast/full 검증이 모두 통과했다.
 
 ## 주의사항
 
