@@ -52,3 +52,8 @@
 | 2026-04-28 | 브라우저 DOM 플로우 | 통과 | 성장기록 2개 선택, Gemini 챕터 제안(`source: "Gemini"`, 챕터 2개), 주문 생성, 완료 상태 변경, JSON 다운로드 링크를 확인했다. |
 | 2026-04-28 | `scripts/verify-fast.sh` | 통과 | UI/UX 개편 후 lint, typecheck, test가 통과했다. |
 | 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | 기존 3000번 실행과 충돌하지 않도록 별도 포트에서 lint, typecheck, test, build, Docker Compose, `/api/health`, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
+| 2026-04-28 | 성장기록 수정/삭제 UI 보강 | 완료 | 목록 행에 `수정`/`삭제` 버튼을 직접 노출하고 삭제 확인창과 삭제 결과 메시지를 추가했다. |
+| 2026-04-28 | `scripts/verify-fast.sh` | 통과 | 수정/삭제 UI 보강 후 lint, typecheck, test가 통과했다. |
+| 2026-04-28 | `npm run build` | 통과 | 수정/삭제 UI 보강 후 프론트엔드와 서버 빌드가 통과했다. |
+| 2026-04-28 | 브라우저 DOM 수정/삭제 플로우 | 통과 | 목록의 `수정` 버튼으로 제목을 변경하고 `수정 저장` 후 목록에 반영됨을 확인했다. 이어 목록의 `삭제` 버튼과 확인창을 거쳐 기록이 API 목록에서 제거됨을 확인했다. |
+| 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | 수정/삭제 UI 보강 후 Docker Compose 빌드, health check, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |

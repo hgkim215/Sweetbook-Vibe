@@ -272,7 +272,7 @@ small,
 
 .recordRow {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: start;
   border-radius: 8px;
@@ -342,6 +342,36 @@ small,
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.recordActions {
+  display: grid;
+  gap: 6px;
+  min-width: 54px;
+}
+
+.tinyButton {
+  min-height: 28px;
+  border: 1px solid #d8d2c6;
+  background: #fffdf8;
+  color: #4d554f;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 0 9px;
+}
+
+.tinyButton:hover {
+  background: #f7f2e8;
+}
+
+.dangerGhostButton {
+  border-color: #e0c5c2;
+  color: #8d3430;
+}
+
+.dangerGhostButton:hover {
+  background: #f4e5e2;
+  color: #7e2f2b;
 }
 
 .recordForm {
@@ -549,5 +579,15 @@ small,
 
   .pane {
     padding: 14px;
+  }
+
+  .recordRow {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+
+  .recordActions {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
   }
 }

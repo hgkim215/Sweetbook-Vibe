@@ -60,13 +60,22 @@ function App() {
     await refresh();
   }
 
-  async function deleteRecord(id: string) {
-    await fetch(`/api/records/${id}`, { method: 'DELETE' });
-    setSelectedRecordIds((current) => current.filter((recordId) => recordId !== id));
-    if (activeRecord?.id === id) {
+  async function deleteRecord(record: GrowthRecord) {
+    const shouldDelete = window.confirm(`"${record.title}" 기록을 삭제할까요?`);
+    if (!shouldDelete) return;
+
+    const response = await fetch(`/api/records/${record.id}`, { method: 'DELETE' });
+    if (!response.ok) {
+      setMessage((await response.json()).message ?? '성장기록 삭제에 실패했습니다.');
+      return;
+    }
+
+    setSelectedRecordIds((current) => current.filter((recordId) => recordId !== record.id));
+    if (activeRecord?.id === record.id) {
       setActiveRecord(null);
       setForm(recordForm());
     }
+    setMessage('성장기록을 삭제했습니다.');
     await refresh();
   }
 
@@ -183,23 +192,27 @@ function App() {
               const isSelected = selectedRecordIds.includes(record.id);
               const isActive = activeRecord?.id === record.id;
               return (
-              <div key={record.id} className={`recordRow ${isSelected ? 'selected' : ''} ${isActive ? 'active' : ''}`}>
-                <input
-                  type="checkbox"
-                  aria-label={`${record.title} 책 포함 선택`}
-                  checked={isSelected}
-                  onChange={(event) => {
-                    setSelectedRecordIds((current) =>
-                      event.target.checked ? [...current, record.id] : current.filter((id) => id !== record.id)
-                    );
-                  }}
-                />
-                <button type="button" className="recordSelect" onClick={() => editRecord(record)}>
-                  <span className="rowTitle">{record.title}</span>
-                  <span className="rowMeta">{label(record.category)} · {record.recordDate}</span>
-                  <span className="rowSummary">{record.summary}</span>
-                </button>
-              </div>
+                <div key={record.id} className={`recordRow ${isSelected ? 'selected' : ''} ${isActive ? 'active' : ''}`}>
+                  <input
+                    type="checkbox"
+                    aria-label={`${record.title} 책 포함 선택`}
+                    checked={isSelected}
+                    onChange={(event) => {
+                      setSelectedRecordIds((current) =>
+                        event.target.checked ? [...current, record.id] : current.filter((id) => id !== record.id)
+                      );
+                    }}
+                  />
+                  <button type="button" className="recordSelect" aria-label={`${record.title} 상세 수정 열기`} onClick={() => editRecord(record)}>
+                    <span className="rowTitle">{record.title}</span>
+                    <span className="rowMeta">{label(record.category)} · {record.recordDate}</span>
+                    <span className="rowSummary">{record.summary}</span>
+                  </button>
+                  <div className="recordActions" aria-label={`${record.title} 관리`}>
+                    <button type="button" className="tinyButton" onClick={() => editRecord(record)}>수정</button>
+                    <button type="button" className="tinyButton dangerGhostButton" onClick={() => deleteRecord(record)}>삭제</button>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -252,7 +265,7 @@ function App() {
             </Field>
             <div className="actionBar">
               <button type="submit">{activeRecord ? '수정 저장' : '기록 추가'}</button>
-              {activeRecord && <button type="button" className="dangerButton" onClick={() => deleteRecord(activeRecord.id)}>삭제</button>}
+              {activeRecord && <button type="button" className="dangerButton" onClick={() => deleteRecord(activeRecord)}>삭제</button>}
             </div>
           </form>
         </section>
