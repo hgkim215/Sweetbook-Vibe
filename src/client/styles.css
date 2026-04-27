@@ -74,9 +74,10 @@ main {
 h1 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(44px, 8vw, 96px);
-  line-height: 0.95;
+  font-size: clamp(38px, 6vw, 74px);
+  line-height: 1.02;
   letter-spacing: 0;
+  word-break: keep-all;
 }
 
 h2,
@@ -91,6 +92,7 @@ p {
   color: #5f6861;
   font-size: 18px;
   line-height: 1.6;
+  word-break: keep-all;
 }
 
 .heroPanel {
@@ -273,4 +275,3 @@ small {
     padding: 24px 0 0;
   }
 }
-
