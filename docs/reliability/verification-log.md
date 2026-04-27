@@ -41,3 +41,4 @@
 | 2026-04-28 | Gemini 키 미설정 fallback 엔드포인트 검증 | 통과 | `.env`에 Gemini 키가 없는 상태에서 HTTP 200, `source: "mock"`, 챕터 2개를 확인했다. |
 | 2026-04-28 | `npm run build` | 통과 | Gemini 전환 후 Vite 프론트엔드와 Express 서버 TypeScript 빌드가 통과했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 환경 중단 | lint, typecheck, test, build는 통과했지만 Docker 데몬이 준비되지 않아 Docker 단계에서 중단됐다. |
+| 2026-04-28 | `origin/dev` 푸시 | 완료 | `feat: switch assistant to gemini api` 커밋을 `dev`에 푸시했다. `main` 반영은 Docker 재검증 전까지 보류한다. |
