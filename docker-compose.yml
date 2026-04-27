@@ -1,3 +1,5 @@
+name: growthbook
+
 services:
   growthbook:
     build: .

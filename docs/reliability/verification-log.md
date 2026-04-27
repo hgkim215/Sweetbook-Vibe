@@ -45,3 +45,4 @@
 | 2026-04-28 | Docker 재검증 | 보완 | Docker는 정상 기동했지만 API smoke test가 이전 `openai` source를 기대해 실패했다. Gemini 전환 계약에 맞게 `gemini` source를 허용하도록 수정했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | Gemini 전환 후 lint, typecheck, test, build, Docker Compose, `/api/health`, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
 | 2026-04-28 | Gemini 실제 경로 검증 | 보완 후 통과 | 처음에는 `.env`의 `GEMINI_MODEL=gemini-3.1-flash`가 존재하지 않아 404가 발생했다. `gemini-2.5-flash`로 정정한 뒤 HTTP 200, `source: "gemini"`, 챕터 2개, 잘못된 recordIds 0개를 확인했다. |
+| 2026-04-28 | Docker Compose project name 보정 | 통과 | 한글 폴더명에서 기본 project name이 비어 `docker compose up --build`가 실패했다. `docker-compose.yml`에 `name: growthbook`을 추가해 같은 명령으로 빌드, 기동, health, Lv1-Lv3 API smoke test가 통과했다. |
