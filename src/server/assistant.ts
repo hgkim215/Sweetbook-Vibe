@@ -1,4 +1,18 @@
+import OpenAI from 'openai';
+import { zodTextFormat } from 'openai/helpers/zod';
+import { z } from 'zod';
 import type { ChapterSuggestion, GrowthRecord } from '../shared/types.js';
+
+const ChapterSuggestionSchema = z.object({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  recordIds: z.array(z.string()).min(1),
+  missingQuestions: z.array(z.string()).default([])
+});
+
+const ChapterSuggestionsSchema = z.object({
+  chapters: z.array(ChapterSuggestionSchema)
+});
 
 export async function suggestChapters(records: GrowthRecord[]): Promise<{ source: 'openai' | 'mock'; chapters: ChapterSuggestion[] }> {
   if (records.length === 0) {
@@ -12,7 +26,7 @@ export async function suggestChapters(records: GrowthRecord[]): Promise<{ source
         return { source: 'openai', chapters };
       }
     } catch (error) {
-      console.warn('[assistant] OpenAI 제안 실패, Mock 제안으로 전환합니다.', error);
+      console.warn('[assistant] OpenAI 제안 실패, Mock 제안으로 전환합니다.', openAIErrorSummary(error));
     }
   }
 
@@ -38,30 +52,65 @@ function suggestWithRules(records: GrowthRecord[]): ChapterSuggestion[] {
 }
 
 async function suggestWithOpenAI(records: GrowthRecord[]): Promise<ChapterSuggestion[]> {
-  const response = await fetch('https://api.openai.com/v1/responses', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: process.env.OPENAI_MODEL || 'gpt-5.4',
-      input: `아래 성장기록을 바탕으로 성장기록집 챕터를 JSON 배열로만 제안해줘. 각 항목은 title, summary, recordIds, missingQuestions를 가져야 해. 사용자가 쓰지 않은 사실은 만들지 마.\n\n${JSON.stringify(records, null, 2)}`
-    })
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const response = await client.responses.parse({
+    model: process.env.OPENAI_MODEL || 'gpt-5.4',
+    input: [
+      {
+        role: 'system',
+        content: [
+          {
+            type: 'input_text',
+            text: [
+              '너는 GrowthBook의 성장기록집 챕터 구성을 돕는 보조 정리자다.',
+              '사용자가 작성한 성장기록에 없는 사실은 만들지 않는다.',
+              '챕터는 1개 이상 제안하되, recordIds는 입력으로 받은 성장기록 id만 사용한다.',
+              'missingQuestions는 사용자가 보완하면 좋은 질문만 간결하게 작성한다.'
+            ].join('\n')
+          }
+        ]
+      },
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: `아래 성장기록으로 성장기록집 챕터를 제안해줘.\n\n${JSON.stringify(records, null, 2)}`
+          }
+        ]
+      }
+    ],
+    text: {
+      format: zodTextFormat(ChapterSuggestionsSchema, 'growthbook_chapter_suggestions')
+    }
   });
 
-  if (!response.ok) {
-    throw new Error(`OpenAI API 오류: ${response.status}`);
-  }
+  return normalizeOpenAIChapters(response.output_parsed?.chapters ?? [], records);
+}
 
-  const data = await response.json() as {
-    output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
+function normalizeOpenAIChapters(chapters: ChapterSuggestion[], records: GrowthRecord[]) {
+  const allowedIds = new Set(records.map((record) => record.id));
+  return chapters
+    .map((chapter) => ({
+      title: chapter.title.trim(),
+      summary: chapter.summary.trim(),
+      recordIds: chapter.recordIds.filter((id) => allowedIds.has(id)),
+      missingQuestions: chapter.missingQuestions.map((question) => question.trim()).filter(Boolean)
+    }))
+    .filter((chapter) => chapter.title && chapter.summary && chapter.recordIds.length > 0);
+}
+
+function openAIErrorSummary(error: unknown) {
+  if (!(error instanceof Error)) {
+    return { message: '알 수 없는 OpenAI 오류' };
+  }
+  const maybeApiError = error as Error & { status?: number; code?: string; type?: string };
+  return {
+    message: error.message,
+    status: maybeApiError.status,
+    code: maybeApiError.code,
+    type: maybeApiError.type
   };
-  const text = data.output?.flatMap((item) => item.content ?? [])
-    .find((part) => part.type === 'output_text')?.text;
-  if (!text) return [];
-  const parsed = JSON.parse(text) as ChapterSuggestion[];
-  return parsed.filter((chapter) => Array.isArray(chapter.recordIds));
 }
 
 function chapterTitle(category: string) {
@@ -75,4 +124,3 @@ function chapterTitle(category: string) {
   };
   return titles[category] ?? '성장 기록 모음';
 }
-

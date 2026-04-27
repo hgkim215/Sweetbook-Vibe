@@ -1,6 +1,24 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { suggestChapters } from './assistant.js';
 import type { GrowthRecord } from '../shared/types.js';
+
+const openAIMock = vi.hoisted(() => ({
+  constructor: vi.fn(),
+  parse: vi.fn()
+}));
+
+vi.mock('openai', () => ({
+  default: class MockOpenAI {
+    responses = {
+      parse: openAIMock.parse
+    };
+
+    constructor(config: unknown) {
+      openAIMock.constructor(config);
+    }
+  }
+}));
+
+const { suggestChapters } = await import('./assistant.js');
 
 const records: GrowthRecord[] = [
   {
@@ -19,19 +37,65 @@ const records: GrowthRecord[] = [
   }
 ];
 
-const originalFetch = globalThis.fetch;
 const originalApiKey = process.env.OPENAI_API_KEY;
+const originalModel = process.env.OPENAI_MODEL;
 
 afterEach(() => {
-  globalThis.fetch = originalFetch;
   process.env.OPENAI_API_KEY = originalApiKey;
-  vi.restoreAllMocks();
+  process.env.OPENAI_MODEL = originalModel;
+  openAIMock.constructor.mockReset();
+  openAIMock.parse.mockReset();
 });
 
-describe('AI 보조 정리자 fallback', () => {
-  it('OpenAI API 오류가 나면 Mock 챕터 제안으로 fallback한다', async () => {
+describe('AI 보조 정리자', () => {
+  it('OpenAI SDK 구조화 출력 성공 시 OpenAI 챕터 제안을 반환한다', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
-    globalThis.fetch = vi.fn(async () => new Response('unauthorized', { status: 401 })) as typeof fetch;
+    process.env.OPENAI_MODEL = 'gpt-5.4';
+    openAIMock.parse.mockResolvedValueOnce({
+      output_parsed: {
+        chapters: [
+          {
+            title: '프로젝트 성장',
+            summary: '프로젝트 기록을 중심으로 성장을 정리합니다.',
+            recordIds: ['record-1', 'unknown-record'],
+            missingQuestions: ['결과를 숫자로 표현할 수 있나요?']
+          }
+        ]
+      }
+    });
+
+    const result = await suggestChapters(records);
+
+    expect(result.source).toBe('openai');
+    expect(result.chapters).toEqual([
+      {
+        title: '프로젝트 성장',
+        summary: '프로젝트 기록을 중심으로 성장을 정리합니다.',
+        recordIds: ['record-1'],
+        missingQuestions: ['결과를 숫자로 표현할 수 있나요?']
+      }
+    ]);
+    expect(openAIMock.constructor).toHaveBeenCalledWith({ apiKey: 'test-key' });
+    expect(openAIMock.parse).toHaveBeenCalledWith(expect.objectContaining({ model: 'gpt-5.4' }));
+  });
+
+  it('키가 없으면 OpenAI SDK를 호출하지 않고 Mock 챕터 제안을 반환한다', async () => {
+    process.env.OPENAI_API_KEY = '';
+
+    const result = await suggestChapters(records);
+
+    expect(result.source).toBe('mock');
+    expect(result.chapters).toHaveLength(1);
+    expect(openAIMock.constructor).not.toHaveBeenCalled();
+    expect(openAIMock.parse).not.toHaveBeenCalled();
+  });
+
+  it('OpenAI API 429 오류가 나면 Mock 챕터 제안으로 fallback한다', async () => {
+    process.env.OPENAI_API_KEY = 'test-key';
+    openAIMock.parse.mockRejectedValueOnce(Object.assign(new Error('quota exceeded'), {
+      status: 429,
+      code: 'rate_limit_exceeded'
+    }));
 
     const result = await suggestChapters(records);
 
@@ -40,20 +104,22 @@ describe('AI 보조 정리자 fallback', () => {
     expect(result.chapters[0].recordIds).toEqual(['record-1']);
   });
 
-  it('OpenAI 응답 JSON 파싱에 실패하면 Mock 챕터 제안으로 fallback한다', async () => {
+  it('refusal 또는 구조화 출력 누락 시 Mock 챕터 제안으로 fallback한다', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
-    globalThis.fetch = vi.fn(async () => Response.json({
+    openAIMock.parse.mockResolvedValueOnce({
+      output_parsed: null,
       output: [
         {
+          type: 'message',
           content: [
             {
-              type: 'output_text',
-              text: 'JSON이 아닌 응답'
+              type: 'refusal',
+              refusal: '요청을 처리할 수 없습니다.'
             }
           ]
         }
       ]
-    })) as typeof fetch;
+    });
 
     const result = await suggestChapters(records);
 
