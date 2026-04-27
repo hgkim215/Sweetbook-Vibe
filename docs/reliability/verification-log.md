@@ -29,3 +29,4 @@
 | 2026-04-28 | `scripts/verify-fast.sh` | 통과 | OpenAI SDK 구조화 출력 전환 후 lint, typecheck, test가 통과했다. |
 | 2026-04-28 | OpenAI 실제 경로 재시도 | 제한적 통과 | 현재 `.env` 키로 실제 호출했으나 OpenAI가 `429 insufficient_quota`를 반환했다. 앱은 HTTP 200, `source: "mock"`, 챕터 2개, 잘못된 recordIds 0개로 정상 fallback했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | OpenAI SDK 구조화 출력 전환 후 lint, typecheck, test, build, Docker Compose, `/api/health` smoke test가 통과했다. |
+| 2026-04-28 | `origin/dev` 푸시 | 완료 | `feat: use structured openai assistant output` 커밋을 `dev`에 푸시했다. |
