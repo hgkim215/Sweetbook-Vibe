@@ -35,3 +35,4 @@
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | Lv1-Lv3 API smoke test가 Docker 환경에서 통과했다. |
 | 2026-04-28 | Docker 검증 볼륨 정리 개선 | 완료 | 전체 검증이 테스트용 Compose project를 사용하고 검증 후 볼륨을 제거하도록 보강했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | 테스트용 Compose project, Lv1-Lv3 API smoke test, 볼륨 제거까지 포함해 전체 검증이 통과했다. |
+| 2026-04-28 | `origin/dev`, `origin/main` 반영 | 완료 | Lv1-Lv3 API smoke test와 Docker 검증 볼륨 정리 개선을 두 브랜치에 반영했다. |
