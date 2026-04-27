@@ -22,3 +22,4 @@
 | 2026-04-28 | `scripts/verify-fast.sh` | 통과 | `.env` 로더, OpenAI 오류 fallback 테스트, JSON 파싱 실패 fallback 테스트가 포함된 빠른 검증이 통과했다. |
 | 2026-04-28 | Docker build context 보안 점검 | 보완 | `.env`가 Docker build context에 포함될 수 있어 `.dockerignore`를 추가했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | `.dockerignore` 반영 후 lint, typecheck, test, build, Docker Compose, `/api/health` smoke test가 통과했다. Docker build context는 약 9KB로 줄어 로컬 비밀값과 산출물이 제외됐다. |
+| 2026-04-28 | `origin/dev` 푸시 | 완료 | `chore: harden openai assistant secret handling` 커밋을 `dev`에 푸시했다. |
