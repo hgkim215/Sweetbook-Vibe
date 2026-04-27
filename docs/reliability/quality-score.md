@@ -20,8 +20,8 @@
 | Lv1 Completeness | 1 | 앱이 아직 구현되지 않았다. |
 | Lv2 Business Logic | 1 | 앱이 아직 구현되지 않았다. |
 | Lv3 Export Quality | 1 | 앱이 아직 구현되지 않았다. |
-| UX Clarity | 1 | 앱이 아직 구현되지 않았다. |
-| 아키텍처 | 2 | 기본 스택만 선택됐다. 상세 API와 데이터 모델은 대기 중이다. |
+| UX Clarity | 2 | 사용자 플로우와 제품 명세가 정리됐지만 앱은 아직 구현되지 않았다. |
+| 아키텍처 | 3 | 제품 명세와 데이터 개념이 정리됐다. 실제 API 계약과 구현은 대기 중이다. |
 | Test Coverage | 1 | 앱 스캐폴딩 이후 테스트 하네스를 구성해야 한다. |
 | Docker Reliability | 1 | 앱 스캐폴딩 이후 Docker 구성을 만들어야 한다. |
 | README Quality | 1 | 제출용 README는 대기 중이다. |

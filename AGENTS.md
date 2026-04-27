@@ -12,7 +12,7 @@
 
 ## 현재 단계
 
-하네스 구축부터 시작한다. `docs/product/problem-brief.md`와 `docs/product/product-spec.md`가 완료되기 전까지 서비스 주제를 확정하지 않는다.
+서비스명은 `GrowthBook`이고, 핵심 콘텐츠 단위는 `성장기록`이다. 현재 진행 상태는 `docs/reliability/current-status.md`를 기준으로 확인한다.
 
 ## 작업 규칙
 
@@ -29,6 +29,7 @@
 - 전체 검증: `scripts/verify-full.sh`
 - 품질 점수 기준: `docs/reliability/quality-score.md`
 - 검증 기록: `docs/reliability/verification-log.md`
+- 현재 진행 상태: `docs/reliability/current-status.md`
 
 ## 문서 지도
 
@@ -37,4 +38,3 @@
 - 실행 계획: `docs/exec-plans/`
 - 신뢰성 및 품질 루프: `docs/reliability/`
 - 환경변수와 비밀값 정책: `docs/security/`
-
