@@ -21,7 +21,7 @@
 | Lv2 Business Logic | 5 | 성장기록집 주문 생성, 조회, 상태 변경이 API 수동 플로우와 테스트에서 확인됐다. |
 | Lv3 Export Quality | 5 | 주문 정보, 챕터, 포함 기록, 메타데이터 JSON 익스포트가 수동 검증됐다. |
 | UX Clarity | 4 | 데스크톱/모바일 첫 화면이 정상이며 핵심 플로우가 한 화면에 모여 있다. |
-| 아키텍처 | 3 | 제품 명세와 데이터 개념이 정리됐다. 실제 API 계약과 구현은 대기 중이다. |
+| 아키텍처 | 4 | React/Vite, Express, SQLite, Docker Compose 구조와 REST API 구현이 완료됐다. |
 | Test Coverage | 4 | 핵심 API 테스트, 수동 API 플로우, 브라우저 화면 검증을 통과했다. |
 | Docker Reliability | 4 | Docker Compose 전체 검증과 health smoke test를 통과했다. |
 | README Quality | 4 | 실행 방법, 포트 변경, 더미 데이터, 레벨, 테스트 플로우를 포함했다. 최종 브라우저 검증 후 재확인한다. |

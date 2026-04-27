@@ -19,6 +19,8 @@
 
 - 데스크톱/모바일 첫 화면 브라우저 검증 완료
 - API 핵심 플로우 수동 검증 완료
+- 제출용 README 작성 완료
+- 전체 Docker 검증 완료
 
 ## 다음 작업
 
@@ -36,7 +38,7 @@
 
 ## 최근 커밋
 
-- `2753c86 feat: implement growthbook lv3 flow`
+- `d6f0951 chore: harden submission flow`
 
 ## 주의사항
 
