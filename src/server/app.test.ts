@@ -8,8 +8,12 @@ import { createRepository, type Repository } from './repository.js';
 
 let repo: Repository;
 let app: ReturnType<typeof createApp>;
+const originalGeminiApiKey = process.env.GEMINI_API_KEY;
+const originalGoogleApiKey = process.env.GOOGLE_API_KEY;
 
 beforeEach(() => {
+  process.env.GEMINI_API_KEY = '';
+  process.env.GOOGLE_API_KEY = '';
   const dir = mkdtempSync(path.join(tmpdir(), 'growthbook-'));
   repo = createRepository(path.join(dir, 'test.sqlite'));
   app = createApp(repo);
@@ -17,6 +21,8 @@ beforeEach(() => {
 
 afterEach(() => {
   repo.close();
+  process.env.GEMINI_API_KEY = originalGeminiApiKey;
+  process.env.GOOGLE_API_KEY = originalGoogleApiKey;
 });
 
 describe('GrowthBook API', () => {
@@ -40,6 +46,20 @@ describe('GrowthBook API', () => {
 
     await request(app).put(`/api/records/${created.body.id}`).send({ title: '수정된 성장기록' }).expect(200);
     await request(app).delete(`/api/records/${created.body.id}`).expect(204);
+  });
+
+  it('AI 예시 성장기록을 1개 생성해 목록에 추가한다', async () => {
+    const before = await request(app).get('/api/records').expect(200);
+
+    const created = await request(app).post('/api/assist/sample-record').expect(201);
+
+    expect(created.body.source).toBe('mock');
+    expect(created.body.record.id).toBeTruthy();
+    expect(created.body.record.title).toBeTruthy();
+
+    const after = await request(app).get('/api/records').expect(200);
+    expect(after.body).toHaveLength(before.body.length + 1);
+    expect(after.body.some((record: { id: string }) => record.id === created.body.record.id)).toBe(true);
   });
 
   it('Mock 챕터 제안, 주문 생성, 상태 변경, 익스포트를 처리한다', async () => {
@@ -66,4 +86,3 @@ describe('GrowthBook API', () => {
     expect(exported.body.records.length).toBe(recordIds.length);
   });
 });
-

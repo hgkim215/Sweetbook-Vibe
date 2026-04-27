@@ -26,6 +26,7 @@ function App() {
   const [authorName, setAuthorName] = useState('GrowthBook 사용자');
   const [requestMemo, setRequestMemo] = useState('시간순 흐름과 변화가 잘 보이게 구성해주세요.');
   const [message, setMessage] = useState('');
+  const [sampleLoading, setSampleLoading] = useState(false);
   const [form, setForm] = useState(recordForm());
 
   useEffect(() => {
@@ -77,6 +78,26 @@ function App() {
     }
     setMessage('성장기록을 삭제했습니다.');
     await refresh();
+  }
+
+  async function createSampleRecord() {
+    setSampleLoading(true);
+    setMessage('AI 예시 성장기록을 생성 중입니다.');
+    try {
+      const response = await fetch('/api/assist/sample-record', { method: 'POST' });
+      const data = await response.json() as { source?: 'gemini' | 'mock'; record?: GrowthRecord; message?: string };
+      if (!response.ok || !data.record || !data.source) {
+        setMessage(data.message ?? 'AI 예시 성장기록 생성에 실패했습니다.');
+        return;
+      }
+      setMessage(data.source === 'gemini' ? 'Gemini 예시 성장기록을 추가했습니다.' : 'Mock 예시 성장기록을 추가했습니다.');
+      await refresh();
+      editRecord(data.record);
+    } catch {
+      setMessage('AI 예시 성장기록 생성에 실패했습니다.');
+    } finally {
+      setSampleLoading(false);
+    }
   }
 
   async function suggest() {
@@ -186,6 +207,11 @@ function App() {
               <p>편집할 기록과 책에 넣을 기록을 고릅니다.</p>
             </div>
             <span className="countBadge">{selectedRecords.length}개 선택</span>
+          </div>
+          <div className="recordToolbar">
+            <button type="button" className="secondaryButton" onClick={createSampleRecord} disabled={sampleLoading}>
+              {sampleLoading ? '생성 중' : 'AI 예시 기록 생성'}
+            </button>
           </div>
           <div className="recordList">
             {records.map((record) => {

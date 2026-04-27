@@ -270,6 +270,11 @@ small,
   gap: 10px;
 }
 
+.recordToolbar {
+  display: grid;
+  margin-bottom: 12px;
+}
+
 .recordRow {
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr) auto;

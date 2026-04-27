@@ -1,5 +1,10 @@
 import { GoogleGenAI, Type } from '@google/genai';
-import type { ChapterSuggestion, GrowthRecord } from '../shared/types.js';
+import type { ChapterSuggestion, GrowthCategory, GrowthRecord } from '../shared/types.js';
+import { randomSampleRecord, type GrowthRecordInput } from './sample-records.js';
+
+type AssistantSource = 'gemini' | 'mock';
+
+const categories: GrowthCategory[] = ['project', 'learning', 'failure', 'improvement', 'reflection', 'impact'];
 
 const chapterSuggestionsSchema = {
   type: Type.OBJECT,
@@ -27,7 +32,26 @@ const chapterSuggestionsSchema = {
   required: ['chapters']
 };
 
-export async function suggestChapters(records: GrowthRecord[]): Promise<{ source: 'gemini' | 'mock'; chapters: ChapterSuggestion[] }> {
+const sampleRecordSchema = {
+  type: Type.OBJECT,
+  properties: {
+    title: { type: Type.STRING },
+    category: { type: Type.STRING },
+    recordDate: { type: Type.STRING },
+    summary: { type: Type.STRING },
+    body: { type: Type.STRING },
+    lesson: { type: Type.STRING },
+    result: { type: Type.STRING },
+    nextAction: { type: Type.STRING },
+    tags: {
+      type: Type.ARRAY,
+      items: { type: Type.STRING }
+    }
+  },
+  required: ['title', 'category', 'recordDate', 'summary', 'body', 'lesson', 'result', 'nextAction', 'tags']
+};
+
+export async function suggestChapters(records: GrowthRecord[]): Promise<{ source: AssistantSource; chapters: ChapterSuggestion[] }> {
   if (records.length === 0) {
     return { source: 'mock', chapters: [] };
   }
@@ -44,6 +68,21 @@ export async function suggestChapters(records: GrowthRecord[]): Promise<{ source
   }
 
   return { source: 'mock', chapters: suggestWithRules(records) };
+}
+
+export async function generateSampleRecord(): Promise<{ source: AssistantSource; record: GrowthRecordInput }> {
+  if (geminiApiKey()) {
+    try {
+      const record = await generateSampleRecordWithGemini();
+      if (record) {
+        return { source: 'gemini', record };
+      }
+    } catch (error) {
+      console.warn('[assistant] Gemini 예시 기록 생성 실패, Mock 예시로 전환합니다.', aiErrorSummary(error));
+    }
+  }
+
+  return { source: 'mock', record: randomSampleRecord() };
 }
 
 function suggestWithRules(records: GrowthRecord[]): ChapterSuggestion[] {
@@ -88,6 +127,31 @@ async function suggestWithGemini(records: GrowthRecord[]): Promise<ChapterSugges
   return normalizeAIChapters(parsed.chapters, records);
 }
 
+async function generateSampleRecordWithGemini(): Promise<GrowthRecordInput | null> {
+  const client = new GoogleGenAI({ apiKey: geminiApiKey() });
+  const response = await client.models.generateContent({
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    contents: [
+      [
+        '너는 GrowthBook의 데모용 성장기록 생성을 돕는 보조 정리자다.',
+        '실제 개인정보, 특정 회사명, 특정 학교명, 확인 불가능한 과장 성과는 쓰지 않는다.',
+        '취준생, 주니어 개발자, 학습자가 남길 법한 성장기록 1개만 만든다.',
+        `category는 반드시 ${categories.join(', ')} 중 하나만 사용한다.`,
+        'recordDate는 YYYY-MM-DD 형식으로 작성한다.',
+        'tags는 한국어 태그 2~4개로 작성한다.',
+        '',
+        'GrowthBook 성장기록 JSON 1개를 생성해줘.'
+      ].join('\n')
+    ],
+    config: {
+      responseMimeType: 'application/json',
+      responseSchema: sampleRecordSchema
+    }
+  });
+
+  return parseGeminiSampleRecord(response.text);
+}
+
 function parseGeminiChapters(text: string | undefined): { chapters: ChapterSuggestion[] } {
   if (!text) return { chapters: [] };
   const parsed = JSON.parse(text) as { chapters?: unknown };
@@ -95,6 +159,11 @@ function parseGeminiChapters(text: string | undefined): { chapters: ChapterSugge
   return {
     chapters: parsed.chapters.filter(isChapterSuggestion)
   };
+}
+
+function parseGeminiSampleRecord(text: string | undefined): GrowthRecordInput | null {
+  if (!text) return null;
+  return normalizeSampleRecord(JSON.parse(text));
 }
 
 function isChapterSuggestion(value: unknown): value is ChapterSuggestion {
@@ -118,6 +187,41 @@ function normalizeAIChapters(chapters: ChapterSuggestion[], records: GrowthRecor
       missingQuestions: chapter.missingQuestions.map((question) => question.trim()).filter(Boolean)
     }))
     .filter((chapter) => chapter.title && chapter.summary && chapter.recordIds.length > 0);
+}
+
+function normalizeSampleRecord(value: unknown): GrowthRecordInput | null {
+  if (!value || typeof value !== 'object') return null;
+  const record = value as Partial<GrowthRecordInput>;
+  if (typeof record.category !== 'string' || !categories.includes(record.category as GrowthCategory)) return null;
+  if (!Array.isArray(record.tags) || !record.tags.every((tag) => typeof tag === 'string')) return null;
+
+  const normalized: GrowthRecordInput = {
+    title: stringField(record.title),
+    category: record.category as GrowthCategory,
+    recordDate: stringField(record.recordDate),
+    summary: stringField(record.summary),
+    body: stringField(record.body),
+    lesson: stringField(record.lesson),
+    result: stringField(record.result),
+    nextAction: stringField(record.nextAction),
+    tags: record.tags.map((tag) => tag.trim()).filter(Boolean)
+  };
+
+  const requiredTexts = [
+    normalized.title,
+    normalized.recordDate,
+    normalized.summary,
+    normalized.body,
+    normalized.lesson,
+    normalized.result,
+    normalized.nextAction
+  ];
+  if (requiredTexts.some((item) => !item) || normalized.tags.length === 0) return null;
+  return normalized;
+}
+
+function stringField(value: unknown) {
+  return typeof value === 'string' ? value.trim() : '';
 }
 
 function geminiApiKey() {

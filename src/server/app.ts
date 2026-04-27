@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'node:path';
 import type { GrowthCategory, OrderStatus } from '../shared/types.js';
-import { suggestChapters } from './assistant.js';
+import { generateSampleRecord, suggestChapters } from './assistant.js';
 import type { Repository } from './repository.js';
 
 export function createApp(repo: Repository) {
@@ -52,6 +52,16 @@ export function createApp(repo: Repository) {
     const records = repo.recordsByIds(recordIds);
     const result = await suggestChapters(records);
     res.json(result);
+  });
+
+  app.post('/api/assist/sample-record', async (_req, res) => {
+    try {
+      const result = await generateSampleRecord();
+      const record = repo.createRecord(result.record);
+      res.status(201).json({ source: result.source, record });
+    } catch (error) {
+      res.status(400).json({ message: message(error) });
+    }
   });
 
   app.get('/api/orders', (_req, res) => {

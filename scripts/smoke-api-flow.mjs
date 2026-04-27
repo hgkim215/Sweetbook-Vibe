@@ -4,6 +4,19 @@ async function main() {
   const records = await request('/api/records');
   assert(Array.isArray(records) && records.length >= 2, '더미 성장기록이 2개 이상 필요합니다.');
 
+  const sample = await request('/api/assist/sample-record', {
+    method: 'POST',
+    expectedStatus: 201
+  });
+  assert(['gemini', 'mock'].includes(sample.source), 'AI 예시 성장기록 source가 올바르지 않습니다.');
+  assert(sample.record?.id && sample.record?.title, 'AI 예시 성장기록이 생성되지 않았습니다.');
+
+  const recordsAfterSample = await request('/api/records');
+  assert(
+    recordsAfterSample.some((record) => record.id === sample.record.id),
+    'AI 예시 성장기록이 목록에 추가되지 않았습니다.'
+  );
+
   const created = await request('/api/records', {
     method: 'POST',
     body: {

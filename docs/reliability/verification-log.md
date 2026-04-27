@@ -57,3 +57,9 @@
 | 2026-04-28 | `npm run build` | 통과 | 수정/삭제 UI 보강 후 프론트엔드와 서버 빌드가 통과했다. |
 | 2026-04-28 | 브라우저 DOM 수정/삭제 플로우 | 통과 | 목록의 `수정` 버튼으로 제목을 변경하고 `수정 저장` 후 목록에 반영됨을 확인했다. 이어 목록의 `삭제` 버튼과 확인창을 거쳐 기록이 API 목록에서 제거됨을 확인했다. |
 | 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | 수정/삭제 UI 보강 후 Docker Compose 빌드, health check, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
+| 2026-04-28 | AI 예시 성장기록 생성 기능 | 완료 | `POST /api/assist/sample-record`와 `AI 예시 기록 생성` 버튼을 추가했다. 버튼 1회당 성장기록 1개를 저장하고, Gemini 실패 또는 키 없음 시 Mock 샘플 1개를 랜덤 생성한다. |
+| 2026-04-28 | `scripts/verify-fast.sh` | 통과 | AI 예시 성장기록 생성 로직 추가 후 lint, typecheck, 테스트 12개가 통과했다. |
+| 2026-04-28 | `npm run build` | 통과 | AI 예시 성장기록 생성 UI와 서버 API 추가 후 프론트엔드와 서버 빌드가 통과했다. |
+| 2026-04-28 | 브라우저 DOM AI 예시 기록 플로우 | 통과 | 버튼 클릭으로 기록 수가 3개에서 4개로 증가했고, 생성 기록 수정, 선택, 챕터 제안, 주문 생성, JSON 다운로드 링크까지 확인했다. |
+| 2026-04-28 | Gemini 실제 sample-record API | 통과 | 로컬 Gemini 키로 `POST /api/assist/sample-record` 호출 시 HTTP 201, `source: "gemini"`, record id 생성이 확인됐다. |
+| 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | AI 예시 성장기록 생성 기능 추가 후 Docker Compose 빌드, health check, sample-record 포함 Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
