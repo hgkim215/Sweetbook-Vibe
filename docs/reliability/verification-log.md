@@ -24,3 +24,4 @@
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | `.dockerignore` 반영 후 lint, typecheck, test, build, Docker Compose, `/api/health` smoke test가 통과했다. Docker build context는 약 9KB로 줄어 로컬 비밀값과 산출물이 제외됐다. |
 | 2026-04-28 | `origin/dev` 푸시 | 완료 | `chore: harden openai assistant secret handling` 커밋을 `dev`에 푸시했다. |
 | 2026-04-28 | 상태 문서 갱신 | 완료 | OpenAI 키 포함 반복 개선 결과를 현재 상태 문서에 반영했다. |
+| 2026-04-28 | `origin/main` 반영 | 완료 | 전체 검증이 통과한 OpenAI 보안/검증 개선을 제출 브랜치 `main`에 반영했다. |

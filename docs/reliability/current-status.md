@@ -43,7 +43,7 @@
 
 ## 최근 반영
 
-- OpenAI 보조 정리자 `.env` 로딩, 실패 fallback 테스트, Docker build context 비밀값 차단, 관련 문서 갱신을 `origin/dev`에 반영했다.
+- OpenAI 보조 정리자 `.env` 로딩, 실패 fallback 테스트, Docker build context 비밀값 차단, 관련 문서 갱신을 `origin/dev`와 `origin/main`에 반영했다.
 
 ## 주의사항
 
