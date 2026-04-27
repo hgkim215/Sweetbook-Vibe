@@ -1,17 +1,17 @@
-# Architecture
+# 아키텍처
 
-Status: Bootstrap baseline.
+상태: 하네스 부트스트랩 기준선.
 
-## Stack
+## 기술 스택
 
-- Frontend: React + Vite
-- Backend: Express
-- Database: SQLite
-- Runtime: Docker Compose
+- 프론트엔드: React + Vite
+- 백엔드: Express
+- 데이터베이스: SQLite
+- 실행 환경: Docker Compose
 
-## Architecture Direction
+## 아키텍처 방향
 
-Use a simple full-stack architecture that is easy to run, inspect, test, and explain in an interview.
+실행, 점검, 테스트, 면접 설명이 쉬운 단순한 풀스택 구조를 사용한다.
 
 ```text
 Browser
@@ -20,15 +20,15 @@ Browser
   -> SQLite persistence
 ```
 
-## Principles
+## 원칙
 
-- Keep the content service as the primary product surface.
-- Treat book order handling as business logic layered on top of content.
-- Treat Lv3 export as serialization of one complete order package.
-- Prefer explicit REST APIs over hidden framework magic.
-- Keep the data model small enough to explain clearly.
+- 콘텐츠 서비스를 제품의 핵심 화면으로 둔다.
+- 책 주문 처리는 콘텐츠 위에 쌓이는 비즈니스 로직으로 다룬다.
+- Lv3 익스포트는 주문 1건 전체를 직렬화하는 기능으로 다룬다.
+- 숨겨진 프레임워크 동작보다 명시적인 REST API를 우선한다.
+- 데이터 모델은 면접에서 짧게 설명 가능한 수준으로 유지한다.
 
-## Initial Runtime Assumption
+## 초기 실행 가정
 
-The final app should run through Docker Compose with configurable ports. Until the app is scaffolded, verification scripts should report bootstrap-pending status instead of failing.
+최종 앱은 포트 변경이 가능한 Docker Compose 구성으로 실행되어야 한다. 앱이 아직 스캐폴딩되기 전까지 검증 스크립트는 실패하지 않고 하네스 대기 상태를 보고한다.
 

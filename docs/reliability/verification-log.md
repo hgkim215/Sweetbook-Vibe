@@ -1,8 +1,8 @@
-# Verification Log
+# 검증 기록
 
-Record every meaningful verification run here.
+의미 있는 검증 실행 결과를 여기에 기록한다.
 
-| Date | Command | Result | Notes |
+| 날짜 | 명령 | 결과 | 메모 |
 |---|---|---|---|
-| 2026-04-28 | Harness bootstrap pending | Pending | Initial log created before app scaffold. |
+| 2026-04-28 | 하네스 부트스트랩 대기 상태 | 대기 | 앱 스캐폴딩 전 초기 로그를 생성했다. |
 

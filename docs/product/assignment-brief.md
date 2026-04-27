@@ -1,48 +1,48 @@
-# Assignment Brief
+# 과제 요약
 
-## Source
+## 출처
 
-- Original file: `스위트북_개발과제_안내문.pdf`
-- Deadline: 2026-04-29 23:59
-- Submission:
-  - GitHub Public repository URL
-  - Google Form answers for 4 written questions
+- 원본 파일: `스위트북_개발과제_안내문.pdf`
+- 마감: 2026-04-29 23:59
+- 제출물:
+  - GitHub Public 저장소 URL
+  - 구글폼 서술형 문항 4개 답변
 
-## Core Requirement
+## 핵심 요구사항
 
-Plan and implement a content service as a web application. The service should be something that could naturally use a Book Print API like `api.sweetbook.com`, but the API must not be called in this assignment.
+콘텐츠 서비스를 직접 기획하고 웹 애플리케이션으로 구현한다. 이 서비스는 `api.sweetbook.com` 같은 Book Print API를 자연스럽게 활용할 수 있는 서비스라고 가정하되, 이번 과제에서는 실제 API를 호출하지 않는다.
 
-The main product is the content service. Book creation is an add-on feature using the accumulated content.
+서비스의 본체는 콘텐츠 서비스다. 책 만들기는 사용자가 쌓은 콘텐츠를 활용하는 부가 기능으로 설계한다.
 
-## Evaluation Levels
+## 평가 레벨
 
-| Level | Requirement | Evaluation Focus |
+| 레벨 | 요구사항 | 평가 포인트 |
 |---|---|---|
-| Lv1 | Implement the core content service flow | Whether the service flow is complete |
-| Lv2 | Add internal book order creation, lookup, and status management | Whether business logic works |
-| Lv3 | Export data needed for one book order | Data modeling and serialization |
+| Lv1 | 콘텐츠 서비스 핵심 플로우 구현 | 서비스 플로우가 완성되는가 |
+| Lv2 | 내부 책 주문 생성, 조회, 상태 관리 추가 | 비즈니스 로직이 작동하는가 |
+| Lv3 | 주문 1건에 필요한 데이터 익스포트 | 데이터 모델링과 직렬화 능력이 보이는가 |
 
-## Submission Requirements
+## 제출 요건
 
-- Must run with one Docker command such as `docker-compose up`.
-- Port must be configurable through environment variables or `docker-compose.yml`.
-- Must include dummy data visible immediately without login.
-- README must explain execution clearly enough for reviewers.
-- GitHub repository must be Public.
+- `docker-compose up` 같은 Docker 명령 1회로 실행되어야 한다.
+- 포트는 환경변수 또는 `docker-compose.yml` 수정으로 바꿀 수 있어야 한다.
+- 로그인 없이 바로 확인 가능한 더미 데이터가 포함되어야 한다.
+- README만 보고 심사자가 실행할 수 있어야 한다.
+- GitHub 저장소는 Public이어야 한다.
 
-## README Must Include
+## README 필수 포함 항목
 
-- Service introduction
-- Docker execution instructions
-- Completed levels and concrete implementation details
-- Tech stack and architecture
-- AI tool usage history
-- Design intent and possible future improvements
+- 서비스 소개
+- Docker 실행 방법
+- 완성한 레벨과 구체적인 구현 내용
+- 기술 스택과 아키텍처
+- AI 도구 사용 내역
+- 설계 의도와 향후 개선 가능성
 
-## Written Questions
+## 서술형 문항
 
-1. Service planning intent and process
-2. Concrete assignment execution process
-3. Most important decision made during the assignment
-4. Failure or problem encountered while using AI tools
+1. 서비스 기획 의도와 과정
+2. 구체적인 과제 수행 과정
+3. 과제에서 내린 가장 중요한 판단
+4. AI 도구 사용 중 겪은 실패 또는 문제
 

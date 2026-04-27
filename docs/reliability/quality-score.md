@@ -1,38 +1,37 @@
-# Quality Score
+# 품질 점수표
 
-Status: Bootstrap baseline.
+상태: 하네스 부트스트랩 기준선.
 
-Scores use a 1-5 scale.
+점수는 1-5점 척도를 사용한다.
 
-| Score | Meaning |
+| 점수 | 의미 |
 |---|---|
-| 5 | Strong submission signal |
-| 4 | Submission-ready with minor improvement room |
-| 3 | Works but has evaluation risk |
-| 2 | Incomplete implementation or explanation |
-| 1 | Must fix before submission |
+| 5 | 제출물의 강점으로 보일 수준 |
+| 4 | 제출 가능하며 작은 개선 여지만 있음 |
+| 3 | 동작은 하지만 평가 리스크가 있음 |
+| 2 | 구현 또는 설명이 불완전함 |
+| 1 | 제출 전 반드시 수정해야 함 |
 
-## Current Scores
+## 현재 점수
 
-| Area | Score | Notes |
+| 항목 | 점수 | 메모 |
 |---|---:|---|
-| Product Fit | 1 | Topic not fixed yet. |
-| Lv1 Completeness | 1 | App not implemented yet. |
-| Lv2 Business Logic | 1 | App not implemented yet. |
-| Lv3 Export Quality | 1 | App not implemented yet. |
-| UX Clarity | 1 | App not implemented yet. |
-| Architecture | 2 | Baseline stack selected. Detailed API/data model pending. |
-| Test Coverage | 1 | Test harness pending app scaffold. |
-| Docker Reliability | 1 | Docker config pending app scaffold. |
-| README Quality | 1 | Submission README pending. |
+| Product Fit | 1 | 주제가 아직 확정되지 않았다. |
+| Lv1 Completeness | 1 | 앱이 아직 구현되지 않았다. |
+| Lv2 Business Logic | 1 | 앱이 아직 구현되지 않았다. |
+| Lv3 Export Quality | 1 | 앱이 아직 구현되지 않았다. |
+| UX Clarity | 1 | 앱이 아직 구현되지 않았다. |
+| 아키텍처 | 2 | 기본 스택만 선택됐다. 상세 API와 데이터 모델은 대기 중이다. |
+| Test Coverage | 1 | 앱 스캐폴딩 이후 테스트 하네스를 구성해야 한다. |
+| Docker Reliability | 1 | 앱 스캐폴딩 이후 Docker 구성을 만들어야 한다. |
+| README Quality | 1 | 제출용 README는 대기 중이다. |
 
-## Iteration Rule
+## 반복 개선 규칙
 
-After each completed implementation unit:
+각 구현 단위가 완료될 때마다 아래 순서를 따른다.
 
-1. Re-score all areas.
-2. Pick the lowest-scoring area.
-3. Define one small improvement.
-4. Implement, verify, commit, and push to `dev`.
-5. Record the result in `docs/reliability/verification-log.md`.
-
+1. 모든 항목을 다시 채점한다.
+2. 가장 낮은 점수의 항목을 고른다.
+3. 작은 개선 작업 1개로 나눈다.
+4. 구현, 검증, 커밋, `dev` 푸시를 진행한다.
+5. 결과를 `docs/reliability/verification-log.md`에 기록한다.

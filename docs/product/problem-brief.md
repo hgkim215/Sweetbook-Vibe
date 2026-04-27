@@ -1,81 +1,81 @@
-# Problem Brief
+# 문제 정의 문서
 
-Status: Draft template. The service topic is not fixed yet.
+상태: 초안 템플릿. 서비스 주제는 아직 확정하지 않았다.
 
-## 1. Decision Context
+## 1. 의사결정 맥락
 
-- Decision: choose the content-service problem to solve for the Sweetbook assignment.
-- Owner: hyeongikim
-- Deadline: before Lv1 implementation starts.
-- Why now: the service topic determines the content model, order flow, export payload, README story, and written-form answers.
+- 결정할 것: 스위트북 과제에서 해결할 콘텐츠 서비스 문제를 선택한다.
+- 의사결정자: hyeongikim
+- 결정 시점: Lv1 구현 시작 전
+- 지금 결정해야 하는 이유: 서비스 주제는 콘텐츠 모델, 주문 흐름, 익스포트 데이터, README 설명, 구글폼 답변의 기준이 된다.
 
-## 2. Problem Summary
+## 2. 문제 요약
 
-Current vs desired gap:
+현재 상태와 원하는 상태의 차이:
 
-- Current:
-- Desired:
-- Problem:
+- 현재 상태:
+- 원하는 상태:
+- 문제:
 
-## 3. Target Users and Stakeholders
+## 3. 대상 사용자와 이해관계자
 
-- Primary user:
-- Secondary user:
-- Partner/system stakeholder: mock Sweetbook print partner
+- 핵심 사용자:
+- 보조 사용자:
+- 파트너/시스템 이해관계자: 가상의 스위트북 인쇄 파트너
 
-## 4. Evidence and Confidence
+## 4. 근거와 확신도
 
-| Evidence | Source | Confidence |
+| 근거 | 출처 | 확신도 |
 |---|---|---|
-| Assignment requires content-first service with book as add-on | Assignment PDF | High |
+| 과제는 콘텐츠가 본체이고 책은 부가 기능인 서비스를 요구한다. | 과제 PDF | 높음 |
 
-## 5. Assumptions
+## 5. 가정
 
-- The best topic should make repeated content creation natural.
-- The book-order add-on should feel inevitable, not forced.
-- Dummy data should be easy for reviewers to understand immediately.
+- 좋은 주제는 사용자가 반복적으로 콘텐츠를 쌓는 행동이 자연스러워야 한다.
+- 책 주문 부가 기능이 억지스럽지 않고 필연적으로 느껴져야 한다.
+- 더미 데이터는 심사자가 실행 직후 이해하기 쉬워야 한다.
 
-## 6. Unknowns / Open Questions
+## 6. 미확정 질문
 
-- Which content domain creates the strongest product story?
-- Which topic best fits the user's interview narrative?
-- Which topic can be implemented fastest without weakening Lv3?
+- 어떤 콘텐츠 도메인이 가장 강한 제품 서사를 만드는가?
+- 어떤 주제가 지원자의 면접 이야기와 가장 잘 맞는가?
+- 어떤 주제가 Lv3 완성도를 해치지 않으면서 가장 빠르게 구현 가능한가?
 
-## 7. Root Cause Hypotheses and Validation Plan
+## 7. 원인 가설과 검증 계획
 
-| Hypothesis | Validation |
+| 가설 | 검증 방법 |
 |---|---|
-| A strong assignment topic must start from a repeated content accumulation problem. | Compare candidate topics by content frequency, book-fit, implementation size, and presentation clarity. |
+| 강한 과제 주제는 반복적인 콘텐츠 축적 문제에서 출발해야 한다. | 후보 주제를 콘텐츠 생성 빈도, 책 전환 적합성, 구현 규모, 발표 명확성 기준으로 비교한다. |
 
-## 8. Impact Sizing
+## 8. 영향 규모
 
-- User impact:
-- Business impact:
-- Assignment impact:
+- 사용자 영향:
+- 사업적 영향:
+- 과제 평가 영향:
 
-## 9. Scope In / Out
+## 9. 범위
 
-In:
+포함:
 
-- Content CRUD or equivalent core flow
-- Book order creation and status management
-- Order data export
+- 콘텐츠 CRUD 또는 이에 준하는 핵심 플로우
+- 책 주문 생성 및 상태 관리
+- 주문 데이터 익스포트
 
-Out:
+제외:
 
-- Payment
-- Delivery
-- Real authentication
-- Real print API call
-- Print-ready PDF generation
+- 결제
+- 배송
+- 실제 인증
+- 실제 인쇄 API 호출
+- 인쇄용 PDF 생성
 
-## 10. Success Metrics
+## 10. 성공 지표
 
-- Product Fit score reaches 4 or higher before Lv1 implementation.
-- Lv1/Lv2/Lv3 can be explained in one coherent user journey.
-- Export payload can be described as partner-delivery data.
+- Lv1 구현 전 Product Fit 점수가 4점 이상이다.
+- Lv1/Lv2/Lv3가 하나의 일관된 사용자 여정으로 설명된다.
+- 익스포트 데이터가 파트너 전달용 데이터로 설명 가능하다.
 
-## 11. Recommendation Snapshot
+## 11. 권장안 요약
 
-Pending. To be completed in Step 2.
+대기 중. 2단계에서 작성한다.
 
