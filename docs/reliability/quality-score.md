@@ -17,13 +17,13 @@
 | 항목 | 점수 | 메모 |
 |---|---:|---|
 | Product Fit | 4 | 성장기록집 아이디어가 최종 확정되었고, 콘텐츠 본체와 책 주문 부가 기능의 연결이 명확하다. |
-| Lv1 Completeness | 1 | 앱이 아직 구현되지 않았다. |
-| Lv2 Business Logic | 1 | 앱이 아직 구현되지 않았다. |
-| Lv3 Export Quality | 1 | 앱이 아직 구현되지 않았다. |
-| UX Clarity | 2 | 사용자 플로우와 제품 명세가 정리됐지만 앱은 아직 구현되지 않았다. |
+| Lv1 Completeness | 4 | 성장기록 CRUD와 더미 데이터가 구현됐고 API 테스트를 통과했다. |
+| Lv2 Business Logic | 4 | 성장기록집 주문 생성, 조회, 상태 변경이 구현됐고 API 테스트를 통과했다. |
+| Lv3 Export Quality | 4 | 주문 정보, 챕터, 포함 기록, 메타데이터 JSON 익스포트가 구현됐다. |
+| UX Clarity | 3 | 한 화면에서 핵심 플로우를 볼 수 있으나 브라우저 수동 검증이 남아 있다. |
 | 아키텍처 | 3 | 제품 명세와 데이터 개념이 정리됐다. 실제 API 계약과 구현은 대기 중이다. |
-| Test Coverage | 1 | 앱 스캐폴딩 이후 테스트 하네스를 구성해야 한다. |
-| Docker Reliability | 1 | 앱 스캐폴딩 이후 Docker 구성을 만들어야 한다. |
+| Test Coverage | 3 | 핵심 API 테스트가 추가됐고 빠른 검증을 통과했다. 브라우저 플로우 검증은 남아 있다. |
+| Docker Reliability | 2 | Docker 구성을 추가했고 smoke test를 강화했다. 전체 Docker 검증은 남아 있다. |
 | README Quality | 1 | 제출용 README는 대기 중이다. |
 
 ## 반복 개선 규칙

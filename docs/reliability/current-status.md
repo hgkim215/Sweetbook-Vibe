@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: 3단계 제품 명세 작성
+- 현재 단계: 앱 스캐폴딩 및 Lv1-Lv3 1차 구현
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,29 +17,27 @@
 
 ## 진행 중
 
-- 제품 명세와 사용자 플로우 문서화
-- 이후 앱 구현 기준 고정
+- React/Vite 프론트엔드와 Express/SQLite 백엔드 구현
+- 성장기록 CRUD, 주문 관리, JSON 익스포트 1차 구현
 
 ## 다음 작업
 
-1. 앱 스캐폴딩
-2. Lv1 성장기록 CRUD 구현
-3. Lv2 성장기록집 주문/상태 관리 구현
-4. Lv3 주문 데이터 JSON 익스포트 구현
-5. README와 Docker 실행 검증
+1. 전체 검증과 Docker smoke test
+2. README 제출용 작성
+3. 브라우저 수동 검증
+4. 품질 점수 재평가
 
 ## 최근 검증
 
 - `scripts/verify-fast.sh`: 통과
-- 앱 미구성 상태는 하네스 대기 상태로 정상 처리됨
+- `npm run build`: 통과
 
 ## 최근 커밋
 
-- `b8b9353 docs: confirm growth record service idea`
+- `4916ac1 docs: define growthbook product spec`
 
 ## 주의사항
 
 - 실제 `api.sweetbook.com`은 호출하지 않는다.
 - OpenAI API 키가 없어도 Mock 보조 정리자가 동작해야 한다.
 - README는 처음 보는 사람이 바로 실행할 수 있는 제출용 문서로 유지한다.
-

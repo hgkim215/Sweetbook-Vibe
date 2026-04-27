@@ -1,0 +1,16 @@
+services:
+  growthbook:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      DATA_DIR: /app/data
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.4}
+    volumes:
+      - growthbook-data:/app/data
+
+volumes:
+  growthbook-data:
+

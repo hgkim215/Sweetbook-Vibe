@@ -1,0 +1,276 @@
+:root {
+  color: #1f2523;
+  background: #f6f4ef;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  background: #1f5b47;
+  color: white;
+  cursor: pointer;
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #d8d4ca;
+  border-radius: 8px;
+  background: #fffdf8;
+  color: #1f2523;
+  padding: 12px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.hero {
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 48px;
+  align-items: center;
+  border-bottom: 1px solid #d8d4ca;
+}
+
+.eyebrow {
+  color: #1f5b47;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(44px, 8vw, 96px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.lead {
+  max-width: 640px;
+  margin-top: 24px;
+  color: #5f6861;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.heroPanel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  border-left: 1px solid #d8d4ca;
+  padding-left: 28px;
+}
+
+.heroPanel strong {
+  font-size: 52px;
+}
+
+.heroPanel span,
+.helper,
+small {
+  color: #6b746d;
+}
+
+.notice {
+  margin: 24px 0;
+  border-radius: 8px;
+  background: #dff2e9;
+  color: #184b3a;
+  padding: 14px 16px;
+}
+
+.workspace,
+.orders {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 32px;
+  padding: 32px 0;
+}
+
+.sidebar,
+.content,
+.orderArea,
+.orderDetail {
+  border-top: 1px solid #d8d4ca;
+  padding-top: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.recordList {
+  display: grid;
+  gap: 8px;
+}
+
+.recordRow,
+.orderRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  min-height: 64px;
+  padding: 12px;
+  text-align: left;
+}
+
+.recordRow:hover,
+.orderRow:hover {
+  background: #ebe7dc;
+}
+
+.recordRow input {
+  width: 18px;
+}
+
+.recordRow span,
+.orderRow {
+  min-width: 0;
+}
+
+.recordRow b,
+.recordRow small {
+  display: block;
+}
+
+.recordForm,
+.orderGrid > div {
+  display: grid;
+  gap: 12px;
+}
+
+.grid2,
+.orderGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions,
+.statusButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ghost {
+  background: #e5e0d3;
+  color: #26302b;
+}
+
+.danger {
+  background: #8f2d2d;
+}
+
+.orderArea {
+  padding: 32px 0;
+}
+
+.chapterList {
+  display: grid;
+  gap: 12px;
+}
+
+.chapterList article {
+  border-left: 3px solid #1f5b47;
+  padding-left: 14px;
+}
+
+.orders {
+  border-top: 1px solid #d8d4ca;
+}
+
+.orderRow {
+  justify-content: space-between;
+}
+
+.statusButtons button {
+  background: #e5e0d3;
+  color: #26302b;
+}
+
+.statusButtons .active {
+  background: #1f5b47;
+  color: white;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 16px;
+  border-radius: 8px;
+  background: #1f5b47;
+  color: white;
+  padding: 0 16px;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  main {
+    padding: 20px;
+  }
+
+  .hero,
+  .workspace,
+  .orders,
+  .grid2,
+  .orderGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroPanel {
+    border-left: 0;
+    border-top: 1px solid #d8d4ca;
+    padding: 24px 0 0;
+  }
+}
+

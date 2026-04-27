@@ -15,13 +15,14 @@ npm test
 npm run build
 
 if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
-  docker compose up --build -d
+  trap 'docker compose --project-name growthbook down >/dev/null 2>&1 || true' EXIT
+  docker compose --project-name growthbook up --build -d
   ./scripts/smoke-docker.sh
-  docker compose down
+  docker compose --project-name growthbook down
+  trap - EXIT
 else
   echo "[verify-full] Docker Compose file not found"
   exit 1
 fi
 
 echo "[verify-full] Passed"
-

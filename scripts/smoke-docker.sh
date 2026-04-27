@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ ! -f package.json ]; then
-  echo "[smoke-docker] App not bootstrapped yet"
-  exit 0
-fi
+PORT="${PORT:-3000}"
+URL="http://localhost:${PORT}/api/health"
 
-echo "[smoke-docker] TODO: add HTTP smoke checks after app ports are defined"
+for attempt in $(seq 1 30); do
+  if curl -fsS "$URL" >/tmp/growthbook-health.json; then
+    if grep -q '"ok":true' /tmp/growthbook-health.json; then
+      echo "[smoke-docker] Health check passed: $URL"
+      exit 0
+    fi
+  fi
+  echo "[smoke-docker] Waiting for app... attempt ${attempt}/30"
+  sleep 1
+done
 
+echo "[smoke-docker] Health check failed: $URL"
+exit 1
