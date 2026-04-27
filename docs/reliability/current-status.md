@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: 앱 스캐폴딩 및 Lv1-Lv3 1차 구현
+- 현재 단계: README/제출 하드닝 및 브라우저 검증
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -17,24 +17,25 @@
 
 ## 진행 중
 
-- React/Vite 프론트엔드와 Express/SQLite 백엔드 구현
-- 성장기록 CRUD, 주문 관리, JSON 익스포트 1차 구현
+- README 제출용 문서 작성
+- Docker 전체 검증 완료 후 브라우저 수동 검증 준비
 
 ## 다음 작업
 
-1. 전체 검증과 Docker smoke test
-2. README 제출용 작성
-3. 브라우저 수동 검증
-4. 품질 점수 재평가
+1. 브라우저 수동 검증
+2. README 명령 그대로 실행 검증
+3. 품질 점수 재평가
+4. 최종 `main` 반영
 
 ## 최근 검증
 
 - `scripts/verify-fast.sh`: 통과
 - `npm run build`: 통과
+- `scripts/verify-full.sh`: 통과
 
 ## 최근 커밋
 
-- `4916ac1 docs: define growthbook product spec`
+- `2753c86 feat: implement growthbook lv3 flow`
 
 ## 주의사항
 

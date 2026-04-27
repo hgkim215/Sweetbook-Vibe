@@ -10,3 +10,5 @@
 | 2026-04-28 | 제품 명세 작성 | 완료 | GrowthBook 제품 명세와 사용자 플로우를 작성했다. |
 | 2026-04-28 | `scripts/verify-fast.sh` | 통과 | 앱 스캐폴딩, Lv1-Lv3 API, Mock 보조 정리자 테스트가 통과했다. |
 | 2026-04-28 | `npm run build` | 통과 | Vite 프론트엔드와 Express 서버 TypeScript 빌드가 통과했다. |
+| 2026-04-28 | `scripts/verify-full.sh` | 통과 | Docker Compose 빌드, 실행, `/api/health` smoke test가 통과했다. |
+| 2026-04-28 | README 작성 | 완료 | 처음 보는 사람이 실행할 수 있도록 Docker 실행법, 포트 변경, 주요 플로우를 작성했다. |

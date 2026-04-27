@@ -20,11 +20,11 @@
 | Lv1 Completeness | 4 | 성장기록 CRUD와 더미 데이터가 구현됐고 API 테스트를 통과했다. |
 | Lv2 Business Logic | 4 | 성장기록집 주문 생성, 조회, 상태 변경이 구현됐고 API 테스트를 통과했다. |
 | Lv3 Export Quality | 4 | 주문 정보, 챕터, 포함 기록, 메타데이터 JSON 익스포트가 구현됐다. |
-| UX Clarity | 3 | 한 화면에서 핵심 플로우를 볼 수 있으나 브라우저 수동 검증이 남아 있다. |
+| UX Clarity | 4 | 한 화면에서 성장기록, 주문, 익스포트 플로우를 확인할 수 있다. 브라우저 최종 검증은 남아 있다. |
 | 아키텍처 | 3 | 제품 명세와 데이터 개념이 정리됐다. 실제 API 계약과 구현은 대기 중이다. |
 | Test Coverage | 3 | 핵심 API 테스트가 추가됐고 빠른 검증을 통과했다. 브라우저 플로우 검증은 남아 있다. |
-| Docker Reliability | 2 | Docker 구성을 추가했고 smoke test를 강화했다. 전체 Docker 검증은 남아 있다. |
-| README Quality | 1 | 제출용 README는 대기 중이다. |
+| Docker Reliability | 4 | Docker Compose 전체 검증과 health smoke test를 통과했다. |
+| README Quality | 4 | 실행 방법, 포트 변경, 더미 데이터, 레벨, 테스트 플로우를 포함했다. 최종 브라우저 검증 후 재확인한다. |
 
 ## 반복 개선 규칙
 
