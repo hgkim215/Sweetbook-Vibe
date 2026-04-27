@@ -30,3 +30,8 @@
 | 2026-04-28 | OpenAI 실제 경로 재시도 | 제한적 통과 | 현재 `.env` 키로 실제 호출했으나 OpenAI가 `429 insufficient_quota`를 반환했다. 앱은 HTTP 200, `source: "mock"`, 챕터 2개, 잘못된 recordIds 0개로 정상 fallback했다. |
 | 2026-04-28 | `scripts/verify-full.sh` | 통과 | OpenAI SDK 구조화 출력 전환 후 lint, typecheck, test, build, Docker Compose, `/api/health` smoke test가 통과했다. |
 | 2026-04-28 | `origin/dev` 푸시 | 완료 | `feat: use structured openai assistant output` 커밋을 `dev`에 푸시했다. |
+| 2026-04-28 | `origin/main` 반영 | 완료 | OpenAI SDK 구조화 출력 전환을 제출 브랜치 `main`에 반영했다. |
+| 2026-04-28 | Lv1-Lv3 API smoke test 보강 | 진행 중 | Docker 전체 검증에서 헬스체크 외에 성장기록 CRUD, 챕터 제안, 주문 상태 변경, JSON 익스포트를 확인하도록 보강한다. |
+| 2026-04-28 | `scripts/verify-full.sh` | 통과 | Lv1-Lv3 API smoke test가 Docker 환경에서 통과했다. |
+| 2026-04-28 | Docker 검증 볼륨 정리 개선 | 완료 | 전체 검증이 테스트용 Compose project를 사용하고 검증 후 볼륨을 제거하도록 보강했다. |
+| 2026-04-28 | `scripts/verify-full.sh` | 통과 | 테스트용 Compose project, Lv1-Lv3 API smoke test, 볼륨 제거까지 포함해 전체 검증이 통과했다. |

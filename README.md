@@ -118,7 +118,7 @@ scripts/verify-fast.sh
 scripts/verify-full.sh
 ```
 
-전체 검증은 lint, typecheck, test, build, Docker Compose 실행, `/api/health` smoke test를 포함합니다.
+전체 검증은 lint, typecheck, test, build, Docker Compose 실행, `/api/health` smoke test, Lv1-Lv3 API 플로우 smoke test를 포함합니다.
 
 ## 기술 스택
 

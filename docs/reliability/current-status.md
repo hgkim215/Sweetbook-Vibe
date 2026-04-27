@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 현재 단계: OpenAI SDK 구조화 출력 전환 완료, `main` 반영 준비
+- 현재 단계: Docker 전체 검증의 Lv1-Lv3 API 플로우 보강 완료, 커밋/푸시 준비
 - 브랜치: `dev`
 - 서비스명: GrowthBook
 - 핵심 콘텐츠 단위: 성장기록
@@ -20,13 +20,15 @@
 - OpenAI SDK 구조화 출력 전환 완료
 - 실제 OpenAI 경로 재검증 완료
 - 전체 검증 완료
-- `origin/dev` 푸시 완료
+- `origin/dev`와 `origin/main` 반영 완료
+- Lv1-Lv3 API smoke test 추가 완료
+- 테스트용 Docker 볼륨 정리 개선 완료
 
 ## 다음 작업
 
-1. `main` 반영
-2. 다음 품질 반복 개선 항목 탐색
-3. 반복 개선 사이클 상태 문서 갱신
+1. 검증 결과 커밋/푸시
+2. `main` 반영
+3. 다음 품질 반복 개선 항목 탐색
 
 ## 최근 검증
 
@@ -47,10 +49,14 @@
 - 실제 OpenAI 호출 재시도: `429 insufficient_quota`로 Mock fallback 확인
 - OpenAI SDK 전환 후 `scripts/verify-full.sh`: 통과
 - `origin/dev` 푸시: 완료
+- `origin/main` 반영: 완료
+- Lv1-Lv3 API smoke test: 통과
+- 테스트용 Docker 볼륨 제거: 통과
+- Lv1-Lv3 API smoke test 포함 `scripts/verify-full.sh`: 통과
 
 ## 최근 반영
 
-- OpenAI 보조 정리자를 SDK와 구조화 출력 기반으로 전환하고 `origin/dev`에 반영했다. 자동 검증과 Docker 전체 검증은 통과했고, 실제 키 재시도는 OpenAI 계정 쿼터 문제로 `source: "openai"` 성공까지 확인하지 못했다. Mock fallback은 정상 동작했다.
+- OpenAI 보조 정리자를 SDK와 구조화 출력 기반으로 전환하고 `origin/dev`, `origin/main`에 반영했다. Docker 전체 검증에 Lv1-Lv3 API 플로우 smoke test를 추가했고, 테스트 데이터 볼륨을 남기지 않도록 정리 방식을 보강했다.
 
 ## 주의사항
 

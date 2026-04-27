@@ -15,10 +15,12 @@ npm test
 npm run build
 
 if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
-  trap 'docker compose --project-name growthbook down >/dev/null 2>&1 || true' EXIT
-  docker compose --project-name growthbook up --build -d
+  COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-growthbook-verify}"
+  trap 'docker compose --project-name "$COMPOSE_PROJECT_NAME" down -v >/dev/null 2>&1 || true' EXIT
+  docker compose --project-name "$COMPOSE_PROJECT_NAME" up --build -d
   ./scripts/smoke-docker.sh
-  docker compose --project-name growthbook down
+  BASE_URL="http://localhost:${PORT:-3000}" node scripts/smoke-api-flow.mjs
+  docker compose --project-name "$COMPOSE_PROJECT_NAME" down -v
   trap - EXIT
 else
   echo "[verify-full] Docker Compose file not found"
