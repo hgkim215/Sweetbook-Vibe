@@ -36,7 +36,7 @@ async function main() {
     method: 'POST',
     body: { recordIds }
   });
-  assert(['openai', 'mock'].includes(suggestions.source), '챕터 제안 source가 올바르지 않습니다.');
+  assert(['gemini', 'mock'].includes(suggestions.source), '챕터 제안 source가 올바르지 않습니다.');
   assert(Array.isArray(suggestions.chapters) && suggestions.chapters.length > 0, '챕터 제안이 비어 있습니다.');
 
   const invalidIds = suggestions.chapters
