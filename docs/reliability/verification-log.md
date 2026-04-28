@@ -69,3 +69,4 @@
 | 2026-04-28 | `npm run build` | 통과 | 상태 전이 UI 변경 후 프론트엔드와 서버 빌드가 통과했다. |
 | 2026-04-28 | 브라우저 DOM 주문 상태 전이 플로우 | 통과 | `대기` 상태의 다음 행동, `처리 중` 상태의 다음 행동, `완료` 종료 메시지를 확인했고, 완료 후 되돌리기 API 요청은 400으로 거부됐다. |
 | 2026-04-28 | `PORT=3002 scripts/verify-full.sh` | 통과 | 주문 상태 전이 강화 후 Docker Compose 빌드, health check, Lv1-Lv3 API smoke test, 볼륨 제거까지 통과했다. |
+| 2026-04-28 | `origin/dev`, `origin/main` 반영 | 완료 | `feat: enforce order status transitions` 커밋 `02f3425`를 두 브랜치에 반영했다. |
