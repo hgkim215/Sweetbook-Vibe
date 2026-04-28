@@ -143,11 +143,16 @@ function App() {
 
   async function updateStatus(status: OrderStatus) {
     if (!activeOrder) return;
-    await fetch(`/api/orders/${activeOrder.id}/status`, {
+    const response = await fetch(`/api/orders/${activeOrder.id}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status })
     });
+    if (!response.ok) {
+      setMessage((await response.json()).message ?? '주문 상태 변경에 실패했습니다.');
+      return;
+    }
+    setMessage(`주문 상태를 ${statusLabel(status)}로 변경했습니다.`);
     await openOrder(activeOrder.id);
     await refresh();
   }
@@ -371,9 +376,12 @@ function App() {
             <div className="detailStack">
               <h3>{activeOrder.title}</h3>
               <p>{activeOrder.requestMemo}</p>
+              <p className="statusLine">현재 상태: <strong>{statusLabel(activeOrder.status)}</strong></p>
               <div className="statusButtons">
-                {(['pending', 'processing', 'completed', 'cancelled'] as OrderStatus[]).map((status) => (
-                  <button type="button" key={status} onClick={() => updateStatus(status)} className={activeOrder.status === status ? 'active' : ''}>{statusLabel(status)}</button>
+                {nextOrderActions(activeOrder.status).length === 0 ? (
+                  <span className="terminalState">{activeOrder.status === 'completed' ? '완료된 주문입니다.' : '취소된 주문입니다.'}</span>
+                ) : nextOrderActions(activeOrder.status).map((action) => (
+                  <button type="button" key={action.status} onClick={() => updateStatus(action.status)} className={action.status === 'cancelled' ? 'dangerSoftButton' : ''}>{action.label}</button>
                 ))}
               </div>
               <a className="download" href={`/api/orders/${activeOrder.id}/export`}>JSON 다운로드</a>
@@ -418,6 +426,22 @@ function statusLabel(status: OrderStatus) {
     cancelled: '취소'
   };
   return labels[status];
+}
+
+function nextOrderActions(status: OrderStatus): Array<{ status: OrderStatus; label: string }> {
+  const actions: Record<OrderStatus, Array<{ status: OrderStatus; label: string }>> = {
+    pending: [
+      { status: 'processing', label: '처리 시작' },
+      { status: 'cancelled', label: '주문 취소' }
+    ],
+    processing: [
+      { status: 'completed', label: '완료 처리' },
+      { status: 'cancelled', label: '주문 취소' }
+    ],
+    completed: [],
+    cancelled: []
+  };
+  return actions[status];
 }
 
 function Field({ label: fieldLabel, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {

@@ -81,8 +81,27 @@ describe('GrowthBook API', () => {
     }).expect(201);
 
     await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'processing' }).expect(200);
+    await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'pending' }).expect(400);
+    await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'completed' }).expect(200);
+    await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'cancelled' }).expect(400);
     const exported = await request(app).get(`/api/orders/${order.body.id}/export`).expect(200);
     expect(exported.body.metadata.partner).toBe('sweetbook-mock');
     expect(exported.body.records.length).toBe(recordIds.length);
+  });
+
+  it('대기 주문은 취소할 수 있고 취소 후 다시 처리할 수 없다', async () => {
+    const records = await request(app).get('/api/records').expect(200);
+    const recordIds = records.body.slice(0, 1).map((record: { id: string }) => record.id);
+
+    const order = await request(app).post('/api/orders').send({
+      title: '취소 테스트 성장기록집',
+      authorName: '김현기',
+      requestMemo: '취소 흐름 검증',
+      recordIds,
+      chapters: []
+    }).expect(201);
+
+    await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'cancelled' }).expect(200);
+    await request(app).patch(`/api/orders/${order.body.id}/status`).send({ status: 'processing' }).expect(400);
   });
 });

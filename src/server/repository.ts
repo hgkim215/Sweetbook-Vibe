@@ -9,6 +9,12 @@ type OrderRow = Omit<BookOrder, 'recordIds' | 'chapters'> & { recordIds: string;
 
 const categories: GrowthCategory[] = ['project', 'learning', 'failure', 'improvement', 'reflection', 'impact'];
 const statuses: OrderStatus[] = ['pending', 'processing', 'completed', 'cancelled'];
+const allowedOrderTransitions: Record<OrderStatus, OrderStatus[]> = {
+  pending: ['processing', 'cancelled'],
+  processing: ['completed', 'cancelled'],
+  completed: [],
+  cancelled: []
+};
 
 export function createRepository(dbPath: string) {
   mkdirSync(path.dirname(dbPath), { recursive: true });
@@ -144,9 +150,13 @@ export function createRepository(dbPath: string) {
       if (!statuses.includes(status)) throw new Error('지원하지 않는 주문 상태입니다.');
       const current = db.prepare('SELECT * FROM orders WHERE id = ?').get(idValue);
       if (!current) return null;
+      const currentOrder = parseOrder(current);
+      if (!allowedOrderTransitions[currentOrder.status].includes(status)) {
+        throw new Error(`주문 상태를 ${statusLabel(currentOrder.status)}에서 ${statusLabel(status)}로 변경할 수 없습니다.`);
+      }
       const updatedAt = new Date().toISOString();
       db.prepare('UPDATE orders SET status = ?, updatedAt = ? WHERE id = ?').run(status, updatedAt, idValue);
-      return parseOrder({ ...(current as OrderRow), status, updatedAt });
+      return { ...currentOrder, status, updatedAt };
     },
     recordsByIds: (recordIds: string[]): GrowthRecord[] => recordIds
       .map((recordId) => db.prepare('SELECT * FROM records WHERE id = ?').get(recordId))
@@ -184,6 +194,16 @@ function validateOrder(order: BookOrder) {
   if (!order.authorName.trim()) throw new Error('작성자명은 필수입니다.');
   if (order.recordIds.length === 0) throw new Error('주문에는 성장기록이 최소 1개 필요합니다.');
   if (!statuses.includes(order.status)) throw new Error('지원하지 않는 주문 상태입니다.');
+}
+
+function statusLabel(status: OrderStatus) {
+  const labels: Record<OrderStatus, string> = {
+    pending: '대기',
+    processing: '처리 중',
+    completed: '완료',
+    cancelled: '취소'
+  };
+  return labels[status];
 }
 
 function seedIfEmpty(db: DatabaseSync) {

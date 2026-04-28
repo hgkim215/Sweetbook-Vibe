@@ -517,6 +517,31 @@ small,
   color: #ffffff;
 }
 
+.statusLine {
+  margin-bottom: 0;
+}
+
+.statusLine strong {
+  color: #202721;
+}
+
+.dangerSoftButton {
+  background: #f4e5e2;
+  color: #8d3430;
+}
+
+.terminalState {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border-radius: 8px;
+  background: #e8e2d5;
+  color: #4d554f;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 10px;
+}
+
 .download {
   width: fit-content;
   margin-top: 4px;
